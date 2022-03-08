@@ -1,0 +1,44 @@
+.postsBox {
+    display: flex;
+    flex-direction: row;
+    flex-flow: row wrap;
+    align-content: center;
+    gap: 1rem;
+}
+
+.post {
+    width: 33rem;
+    height: 20rem;
+    border: 1px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.post > a {
+
+    color: var(--text-color);
+}
+
+.header {
+    text-align: center;
+    color: var(--text-color);
+}
+
+
+.count {
+    margin: 12px 0;
+    color: var(--text-color-secondary);
+}
+
+.spiiiiiin {
+    animation: spin 4s linear infinite;
+    width: 5rem;
+}
+
+@keyframes spin {
+    100% {
+        transform:rotate(360deg);
+    }
+}

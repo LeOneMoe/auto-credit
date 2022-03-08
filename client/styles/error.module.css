@@ -1,0 +1,20 @@
+.header {
+    color: var(--text-color);
+}
+
+.text {
+    color: var(--text-color);
+}
+
+.text > a {
+
+    color: var(--primary-color);
+}
+
+.box {
+    width: 300px;
+    margin: 5px;
+    text-align: center;
+    border: 1px solid #75E6DA;
+    background-color: #D4F1F4;
+}

@@ -1,0 +1,72 @@
+.heading {
+    display: flex;
+    background-color: var(--background-color-light);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    box-shadow: var(--box-shadow);
+    padding: 0.5rem 5.5rem 0.5rem 0.5rem;
+}
+
+.heading button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-right: 2px solid var(--text-color);
+
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+}
+
+.columnHeading {
+    flex: 1;
+    padding: 0.5rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.rowPanel {
+    display: flex;
+    padding: 0.5rem;
+
+    background-color: var(--background-color-light);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    box-shadow: var(--box-shadow);
+
+    transition: transform 200ms ease-in-out, box-shadow 200ms ease-in-out;
+}
+
+.row {
+    display: flex;
+    flex: 1;
+    /*align-items: center;*/
+
+    font-weight: 500;
+}
+
+.rowPanel:hover {
+    transform: translateY(-4px);
+}
+
+.cell {
+    display: flex;
+    flex: 1;
+    align-items: center;
+
+    color: var(--text-color);
+
+    padding: 0.5rem;
+    border-right: 2px solid var(--text-color);
+}
+
+.toolBar {
+    display: flex;
+    width: 5rem;
+}
+
+.toolBar > * {
+    /*padding: 1rem;*/
+}

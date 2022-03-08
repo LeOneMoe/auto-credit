@@ -1,0 +1,110 @@
+{
+  "options": [
+    {
+      "key": "1",
+      "label": "Red"
+    },
+    {
+      "key": "2",
+      "label": "Yellow"
+    },
+    {
+      "key": "3",
+      "label": "Green"
+    },
+    {
+      "key": "4",
+      "label": "Blue"
+    },
+    {
+      "key": "5",
+      "label": "Black"
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "title": "FAGGS",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis et incidunt inventore molestiae natus, non quas quibusdam, recusandae rem, velit vero vitae voluptatum. Adipisci fuga non odio odit porro.",
+      "author": "Someone"
+    },
+    {
+      "id": 2,
+      "title": "MEGGA FAGGS",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis et incidunt inventore molestiae natus, non quas quibusdam, recusandae rem, velit vero vitae voluptatum. Adipisci fuga non odio odit porro.",
+      "author": "Someone"
+    },
+    {
+      "id": 3,
+      "title": "LOL NO FAGGS",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis et incidunt inventore molestiae natus, non quas quibusdam, recusandae rem, velit vero vitae voluptatum. Adipisci fuga non odio odit porro.",
+      "author": "Someone"
+    },
+    {
+      "id": 4,
+      "title": "MEGGA FAGGS",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis et incidunt inventore molestiae natus, non quas quibusdam, recusandae rem, velit vero vitae voluptatum. Adipisci fuga non odio odit porro.",
+      "author": "Someone"
+    },
+    {
+      "id": 5,
+      "title": "MEGGA FAGGS",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis et incidunt inventore molestiae natus, non quas quibusdam, recusandae rem, velit vero vitae voluptatum. Adipisci fuga non odio odit porro.",
+      "author": "Someone"
+    },
+    {
+      "id": 6,
+      "title": "MEGGA FAGGS",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis et incidunt inventore molestiae natus, non quas quibusdam, recusandae rem, velit vero vitae voluptatum. Adipisci fuga non odio odit porro.",
+      "author": "Someone"
+    },
+    {
+      "id": 7,
+      "title": "MEGGA FAGGS",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis et incidunt inventore molestiae natus, non quas quibusdam, recusandae rem, velit vero vitae voluptatum. Adipisci fuga non odio odit porro.",
+      "author": "Someone"
+    },
+    {
+      "id": 8,
+      "title": "MEGGA FAGGS",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis et incidunt inventore molestiae natus, non quas quibusdam, recusandae rem, velit vero vitae voluptatum. Adipisci fuga non odio odit porro.",
+      "author": "Someone"
+    },
+    {
+      "id": 9,
+      "title": "MEGGA FAGGS",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis et incidunt inventore molestiae natus, non quas quibusdam, recusandae rem, velit vero vitae voluptatum. Adipisci fuga non odio odit porro.",
+      "author": "Someone"
+    },
+    {
+      "id": 10,
+      "title": "MEGGA FAGGS",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis et incidunt inventore molestiae natus, non quas quibusdam, recusandae rem, velit vero vitae voluptatum. Adipisci fuga non odio odit porro.",
+      "author": "Someone"
+    },
+    {
+      "id": 11,
+      "title": "MEGGA FAGGS",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis et incidunt inventore molestiae natus, non quas quibusdam, recusandae rem, velit vero vitae voluptatum. Adipisci fuga non odio odit porro.",
+      "author": "Someone"
+    },
+    {
+      "id": 12,
+      "title": "MEGGA FAGGS",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis et incidunt inventore molestiae natus, non quas quibusdam, recusandae rem, velit vero vitae voluptatum. Adipisci fuga non odio odit porro.",
+      "author": "Someone"
+    },
+    {
+      "id": 13,
+      "title": "MEGGA FAGGS",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis et incidunt inventore molestiae natus, non quas quibusdam, recusandae rem, velit vero vitae voluptatum. Adipisci fuga non odio odit porro.",
+      "author": "Someone"
+    },
+    {
+      "id": 14,
+      "title": "MEGGA FAGGS",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis et incidunt inventore molestiae natus, non quas quibusdam, recusandae rem, velit vero vitae voluptatum. Adipisci fuga non odio odit porro.",
+      "author": "Someone"
+    }
+  ]
+}

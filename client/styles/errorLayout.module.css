@@ -1,0 +1,9 @@
+.error {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    background-color: #D4F1F4;
+}
