@@ -15,7 +15,7 @@ const ListClients = ({SSClients, options}) => {
     const router = useRouter();
 
     return (
-        <MainLayout title={`Search Posts`}>
+        <MainLayout title={`Clients`}>
             <Table>
                 <TableHead>
                     <TableColumnHeader>Name</TableColumnHeader>
@@ -30,10 +30,14 @@ const ListClients = ({SSClients, options}) => {
                             key={client.id}
                             href={`/clients/view/[id]`}
                             as={`/clients/view/${client.id}`}
-                            onEdit={() => router.push({
-                                pathname: `/clients/edit/${client.id}`
-                            })}
-                            onDelete={() => deleteById()}
+                            onEdit={() =>
+                                router.push({
+                                    pathname: `/clients/edit/${client.id}`
+                                })
+                            }
+                            onDelete={() => {
+                                deleteById(client.id).then(_ => router.reload())
+                            }}
                         >
                             <TableCell>{client.name}</TableCell>
                             <TableCell>{toIsoString(client.dateOfBirth)}</TableCell>
@@ -59,6 +63,5 @@ export const getServerSideProps = async ({query}) => {
         }
     }
 }
-
 
 export default ListClients

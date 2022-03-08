@@ -1,7 +1,7 @@
 import {useRouter} from "next/router";
 import {MainLayout} from "../../components/MainLayout";
 import {useEffect, useState} from "react";
-import {getAll, getById} from "../../api/posts/crud";
+import {getById} from "../../api/posts/crud";
 
 const Post = ({SSPosts}) => {
     const router = useRouter()

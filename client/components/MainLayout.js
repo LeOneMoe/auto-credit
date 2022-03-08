@@ -6,7 +6,7 @@ function MainLayout({children, title = `Next App`}) {
     return (
         <>
             <Head>
-                <title>{title} | Next course</title>
+                <title>{title} | Auto Credit CRM</title>
             </Head>
 
             <Navigation title={title}/>

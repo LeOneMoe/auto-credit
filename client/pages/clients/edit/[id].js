@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import {FormBody} from "../../../components/FormComponents/FormBody"
 import {ComboBoxField, DateField, TextField} from "../../../components/FormComponents/Fields"
 import {getNationality} from "../../../api/clients/getNationality";
-import {create, getById, update} from "../../../api/clients/crud"
+import {getById, update} from "../../../api/clients/crud"
 import {useRouter} from "next/router";
 
 const formValidation = Yup.object().shape({
@@ -44,7 +44,7 @@ const CreateClient = ({SSClient}) => {
         onSubmit: () => {
             console.log(formik.values)
 
-            update(id, formik.values).then(r => {
+            update(id, formik.values).then(_ => {
                     router.push({
                         pathname: `/clients/view/${id}`,
                     })
@@ -54,11 +54,15 @@ const CreateClient = ({SSClient}) => {
     })
 
     return (
-        <MainLayout title={`Search Posts`}>
+        <MainLayout title={`Edit Client`}>
             <FormBody
-                searchEnabled
                 submitEnabled
+                searchEnabled
                 createEnabled
+
+                onSearch={() => router.push({
+                    pathname: `/clients/search`
+                })}
 
                 onCreate={() => router.push({
                     pathname: `/clients/create`
@@ -68,8 +72,6 @@ const CreateClient = ({SSClient}) => {
 
             >
                 <TextField
-                    // disabled
-
                     width={20}
                     label={`Name`}
                     name={`name`}
@@ -81,8 +83,6 @@ const CreateClient = ({SSClient}) => {
                 />
 
                 <DateField
-                    // disabled
-
                     label={`Date Of Birth`}
                     name={`dateOfBirth`}
                     inputFormat={`dd/MM/yyyy`}
@@ -93,8 +93,6 @@ const CreateClient = ({SSClient}) => {
                 />
 
                 <TextField
-                    // disabled
-
                     width={20}
                     label={`Passport Number`}
                     name={`passportNumber`}
@@ -106,8 +104,6 @@ const CreateClient = ({SSClient}) => {
                 />
 
                 <ComboBoxField
-                    // disabled
-
                     label={`Nationality`}
                     name={`nationality`}
                     placeholder={`Choose Nationality`}

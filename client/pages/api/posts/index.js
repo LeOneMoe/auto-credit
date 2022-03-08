@@ -1,4 +1,3 @@
-import axios from "axios";
 import {getAll} from "../../../api/posts/crud";
 
 const handler = async (req, res) => {

@@ -1,4 +1,3 @@
-import axios from "axios";
 import {getById} from "../../../api/posts/crud";
 
 const postHandler = async ({query: {id}}, res) => {

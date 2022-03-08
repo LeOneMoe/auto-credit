@@ -19,7 +19,7 @@ const update = async (id, params) => {
 }
 
 const deleteById = async (id) => {
-  return await axios.post(`http://localhost:8080/clients/${id}`).then(data => data.data)
+  return await axios.delete(`http://localhost:8080/clients/${id}`).then(data => data.data)
 }
 
 export {getAll, getById, create, update, deleteById}

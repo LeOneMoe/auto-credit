@@ -6,7 +6,7 @@ export function ErrorLayout({children, title = `Next App`}) {
     return (
         <>
             <Head>
-                <title>Error {title} | Next course</title>
+                <title>Error {title} | Auto Credit CRM</title>
             </Head>
 
             <Navigation title={title}/>

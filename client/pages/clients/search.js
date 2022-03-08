@@ -16,7 +16,7 @@ const formValidation = Yup.object().shape({
     nationality: Yup.string().required(`Nationality is required`),
 })
 
-const CreateClient = () => {
+const FindClients = () => {
     const router = useRouter()
 
     const [options, setOptions] = useState([])
@@ -43,7 +43,8 @@ const CreateClient = () => {
         onSubmit: () => {
             create(formik.values).then(r =>
                 router.push({
-                    pathname: `/clients/view/${r.id}`,
+                    pathname: `/clients`,
+                    query: formik.values
                 })
             )
         }
@@ -52,15 +53,10 @@ const CreateClient = () => {
     return (
         <MainLayout title={`Search Posts`}>
             <FormBody
-                searchEnabled
-                submitEnabled
+                createEnabled
 
                 onCreate={() => router.push({
                     pathname: `/clients/create`
-                })}
-
-                onSearch={() => router.push({
-                    pathname: `/clients/search`
                 })}
 
                 onSubmit={formik.handleSubmit}
@@ -112,4 +108,4 @@ const CreateClient = () => {
     )
 }
 
-export default CreateClient
+export default FindClients
