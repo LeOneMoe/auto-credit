@@ -8,6 +8,7 @@ import {ComboBoxField, DateField, TextField} from "../../../components/FormCompo
 import {getNationality} from "../../../api/clients/getNationality";
 import {getById, update} from "../../../api/clients/crud"
 import {useRouter} from "next/router";
+import ClientsNavBar from "../_components/ClientsNavBar";
 
 const formValidation = Yup.object().shape({
     name: Yup.string().trim().max(30, `Too Long`).min(3, `Too Short`).required(`Name is required`),
@@ -55,6 +56,8 @@ const CreateClient = ({SSClient}) => {
 
     return (
         <MainLayout title={`Edit Client`}>
+            <ClientsNavBar id={id} />
+
             <FormBody
                 submitEnabled
                 searchEnabled
@@ -119,7 +122,7 @@ const CreateClient = ({SSClient}) => {
 }
 
 export const getServerSideProps = async ({query}) => {
-    const client = await getById({id: query.id})
+    const client = await getById(query.id)
 
     return {
         props: {

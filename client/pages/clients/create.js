@@ -8,6 +8,7 @@ import {ComboBoxField, DateField, TextField} from "../../components/FormComponen
 import {getNationality} from "../../api/clients/getNationality";
 import {create} from "../../api/clients/crud"
 import {useRouter} from "next/router";
+import ClientsNavBar from "./_components/ClientsNavBar";
 
 const formValidation = Yup.object().shape({
     name: Yup.string().trim().max(30, `Too Long`).min(3, `Too Short`).required(`Name is required`),
@@ -51,6 +52,8 @@ const CreateClient = () => {
 
     return (
         <MainLayout title={`Search Posts`}>
+            <ClientsNavBar childPanelsEnabled={false} />
+
             <FormBody
                 searchEnabled
                 submitEnabled

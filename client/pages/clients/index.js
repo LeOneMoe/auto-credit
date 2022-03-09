@@ -10,12 +10,23 @@ import {MainLayout} from "../../components/MainLayout";
 import {toIsoString} from "../../util/DateUtil";
 import {useRouter} from "next/router";
 import {getOptionLabel} from "../../util/Options";
+import ClientsNavBar from "./_components/ClientsNavBar";
+import Toolbar from "../../components/FormComponents/Toolbar";
 
 const ListClients = ({SSClients, options}) => {
     const router = useRouter();
 
     return (
         <MainLayout title={`Clients`}>
+            <ClientsNavBar childPanelsEnabled={false}/>
+
+            <Toolbar
+                searchEnabled
+                createEnabled
+                onSearch={() => router.push(`/clients/search`)}
+                onCreate={() => router.push(`/clients/create`)}
+            />
+
             <Table>
                 <TableHead>
                     <TableColumnHeader>Name</TableColumnHeader>
@@ -52,7 +63,7 @@ const ListClients = ({SSClients, options}) => {
 }
 
 export const getServerSideProps = async ({query}) => {
-    const clients = await getAll({query})
+    const clients = await getAll(query)
 
     const options = await getNationality()
 

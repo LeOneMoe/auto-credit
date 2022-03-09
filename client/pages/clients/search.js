@@ -6,14 +6,14 @@ import {useEffect, useState} from "react";
 import {FormBody} from "../../components/FormComponents/FormBody"
 import {ComboBoxField, DateField, TextField} from "../../components/FormComponents/Fields"
 import {getNationality} from "../../api/clients/getNationality";
-import {create} from "../../api/clients/crud"
 import {useRouter} from "next/router";
+import ClientsNavBar from "./_components/ClientsNavBar";
 
 const formValidation = Yup.object().shape({
-    name: Yup.string().trim().max(30, `Too Long`).min(3, `Too Short`).required(`Name is required`),
-    dateOfBirth: Yup.string().nullable().required(`Date of Birth is required`),
-    passportNumber: Yup.string().min(10, `Passport number is too short`).required(`Passport Number is required`),
-    nationality: Yup.string().required(`Nationality is required`),
+    name: Yup.string().trim(),
+    dateOfBirth: Yup.string().nullable(),
+    passportNumber: Yup.string(),
+    nationality: Yup.string(),
 })
 
 const FindClients = () => {
@@ -41,18 +41,20 @@ const FindClients = () => {
         },
         validationSchema: formValidation,
         onSubmit: () => {
-            create(formik.values).then(r =>
-                router.push({
-                    pathname: `/clients`,
-                    query: formik.values
-                })
-            )
+            router.push({
+                pathname: `/clients`,
+                query: formik.values
+            })
         }
     })
 
     return (
         <MainLayout title={`Search Posts`}>
+            <ClientsNavBar childPanelsEnabled={false}/>
+
             <FormBody
+                isSearchMode
+
                 createEnabled
 
                 onCreate={() => router.push({

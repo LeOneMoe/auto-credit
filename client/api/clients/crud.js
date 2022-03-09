@@ -1,13 +1,19 @@
 import axios from "axios";
 
-const getById = async ({id}) => {
+const getById = async (id) => {
     console.log(`http://localhost:8080/clients/${id}`)
 
     return await axios.get(`http://localhost:8080/clients/${id}`).then(data => data.data)
 }
 
 const getAll = async (params) => {
-    return await axios.get(`http://localhost:8080/clients`, params).then(data => data.data)
+    for (const key of Object.keys(params)) {
+        if (params[key] === ``) {
+            delete params[key];
+        }
+    }
+
+    return await axios.get(`http://localhost:8080/clients`, {params}).then(data => data.data)
 }
 
 const create = async (params) => {
@@ -19,7 +25,7 @@ const update = async (id, params) => {
 }
 
 const deleteById = async (id) => {
-  return await axios.delete(`http://localhost:8080/clients/${id}`).then(data => data.data)
+    return await axios.delete(`http://localhost:8080/clients/${id}`).then(data => data.data)
 }
 
 export {getAll, getById, create, update, deleteById}

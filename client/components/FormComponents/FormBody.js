@@ -1,10 +1,5 @@
 import classes from "./Form.module.css"
-import SaveIcon from '@mui/icons-material/Save';
-import {IconButton} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/Add';
+import Toolbar from "./Toolbar";
 
 const FormBody = ({
                       children,
@@ -18,30 +13,22 @@ const FormBody = ({
                       editEnabled = false,
                       deleteEnabled = false,
                       submitEnabled = false,
+                      isSearchMode = false,
                   }) => {
     return (
         <form className={classes.form} onSubmit={onSubmit}>
-            <div>
-                <IconButton disabled={!searchEnabled} onClick={onSearch}>
-                    <SearchIcon/>
-                </IconButton>
-
-                <IconButton disabled={!createEnabled} onClick={onCreate}>
-                    <AddIcon/>
-                </IconButton>
-
-                <IconButton disabled={!submitEnabled} type={`submit`}>
-                    <SaveIcon/>
-                </IconButton>
-
-                <IconButton disabled={!editEnabled} onClick={onEdit}>
-                    <EditIcon/>
-                </IconButton>
-
-                <IconButton disabled={!deleteEnabled} onClick={onDelete}>
-                    <DeleteIcon/>
-                </IconButton>
-            </div>
+            <Toolbar
+                onEdit = {onEdit}
+                onSearch = {onSearch}
+                onDelete = {onDelete}
+                onCreate = {onCreate}
+                searchEnabled = {searchEnabled}
+                createEnabled = {createEnabled}
+                editEnabled = {editEnabled}
+                deleteEnabled = {deleteEnabled}
+                submitEnabled = {submitEnabled}
+                isSearchMode = {isSearchMode}
+            />
 
             {children}
         </form>

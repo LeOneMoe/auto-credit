@@ -5,14 +5,20 @@ import {FormBody} from "../../../components/FormComponents/FormBody";
 import {TextField} from "../../../components/FormComponents/Fields/TextField";
 import {toIsoString} from "../../../util/DateUtil";
 import {useRouter} from "next/router";
+import ClientsNavBar from "../_components/ClientsNavBar";
+import {getOptionLabel} from "../../../util/Options";
 
-const ViewClient = ({SSClient, option}) => {
+const ViewClient = ({SSClient, nationality}) => {
     const router = useRouter()
 
     const id = router.query.id
 
+    console.log(SSClient)
+
     return (
         <MainLayout title={`View Client`}>
+            <ClientsNavBar id={id} />
+
             <FormBody
                 createEnabled
                 editEnabled
@@ -64,7 +70,7 @@ const ViewClient = ({SSClient, option}) => {
                     disabled
                     width={20}
                     label={`Nationality`}
-                    value={option}
+                    value={nationality}
                 />
             </FormBody>
         </MainLayout>
@@ -72,14 +78,16 @@ const ViewClient = ({SSClient, option}) => {
 }
 
 export const getServerSideProps = async ({query}) => {
-    const client = await getById({id: query.id})
+    const client = await getById(query.id)
 
     const options = await getNationality(client.nationality)
+
+    console.log(options[0].label)
 
     return {
         props: {
             SSClient: client,
-            option: options[0].label
+            nationality: getOptionLabel(options, client.nationality)
         }
     }
 }

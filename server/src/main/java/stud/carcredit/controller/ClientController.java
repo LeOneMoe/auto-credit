@@ -25,6 +25,8 @@ public class ClientController {
 
     @GetMapping
     public List<Client> find(Client client) {
+        System.out.println(client.toString());
+
         return clientDao.find(
                 client.getName(),
                 client.getPassportNumber(),
