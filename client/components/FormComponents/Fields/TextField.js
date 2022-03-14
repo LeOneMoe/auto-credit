@@ -13,6 +13,7 @@ const TextField = ({label, name, placeholder, value, handleChange, handleBlur, e
                     placeholder={disabled ? `` : placeholder}
                     value={value}
                     onChange={handleChange}
+                    readOnly={!handleChange}
                     onBlur={handleBlur}
                     disabled={disabled}
                 />

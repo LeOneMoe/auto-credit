@@ -39,7 +39,8 @@ const ComboBoxField = ({
                            error,
                            options,
                            width = 20,
-                           disabled = false
+                           disabled = false,
+                           onChangeEvent
                        }) => {
 
     const [initOption, setInitOption] = useState({key: ``, label: ``})
@@ -74,6 +75,11 @@ const ComboBoxField = ({
 
                     onChange={(_, newValue) => {
                         handleChange(name, newValue ? newValue.key : ``)
+
+                        if (onChangeEvent) {
+                            onChangeEvent(newValue ? newValue : ``)
+                        }
+
                     }}
                     onBlur={handleBlur}
 

@@ -1,14 +1,14 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import {MainLayout} from "../../components/MainLayout";
+import {MainLayout} from "../../../../components/MainLayout";
 import {useEffect, useState} from "react";
 
-import {FormBody} from "../../components/FormComponents/FormBody"
-import {ComboBoxField, DateField, TextField} from "../../components/FormComponents/Fields"
-import {getNationality} from "../../api/clients/getNationality";
-import {create} from "../../api/clients/crud"
+import {FormBody} from "../../../../components/FormComponents/FormBody"
+import {ComboBoxField, DateField, TextField} from "../../../../components/FormComponents/Fields"
+import {getNationality} from "../../../../api/clients/getNationality";
+import {create} from "../../../../api/clients/crud"
 import {useRouter} from "next/router";
-import LoansNavBar from "./_components/ClientsNavBar";
+import LoansNavBar from "./_components/LoansNavBar";
 
 const formValidation = Yup.object().shape({
     name: Yup.string().trim().max(30, `Too Long`).min(3, `Too Short`).required(`Name is required`),

@@ -53,10 +53,10 @@ const ListLoans = ({SSLoans, options}) => {
                                 deleteById(loan.id).then(_ => router.reload())
                             }}
                         >
-                            <TableCell>{loan.car.brand}</TableCell>
-                            <TableCell>{loan.car.model}</TableCell>
-                            <TableCell>{loan.car.number}</TableCell>
-                            <TableCell>{toIsoString(loan.car.dateOfPurchase)}</TableCell>
+                            {/*<TableCell>{loan.car.brand}</TableCell>*/}
+                            {/*<TableCell>{loan.car.model}</TableCell>*/}
+                            {/*<TableCell>{loan.car.number}</TableCell>*/}
+                            {/*<TableCell>{toIsoString(loan.car.dateOfPurchase)}</TableCell>*/}
                             <TableCell>$ {loan.totalSum}</TableCell>
                         </TableRow>
                     )}

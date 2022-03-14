@@ -29,10 +29,10 @@ public class Car extends AuditModel {
     private Client client;
 
     @OneToOne(mappedBy = "car")
+    @JsonIgnore
     private Loan loan;
 
     private String brand;
-
 
     private String model;
 

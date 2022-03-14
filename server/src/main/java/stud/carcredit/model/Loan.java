@@ -40,6 +40,9 @@ public class Loan extends AuditModel {
     @JsonIgnore
     private Car car;
 
+    @Column(name = "car_id", updatable = false, insertable = false)
+    private Long carId;
+
     @Column(name = "total_sum")
     @Digits(integer = 10, fraction = 2)
     private BigDecimal totalSum;
@@ -52,6 +55,7 @@ public class Loan extends AuditModel {
                 ", startDate=" + startDate +
                 ", client=" + client +
                 ", car=" + car +
+                ", carId=" + carId +
                 ", totalSum=" + totalSum +
                 '}';
     }

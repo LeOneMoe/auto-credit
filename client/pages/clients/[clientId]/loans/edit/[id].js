@@ -7,7 +7,7 @@ import {FormBody} from "../../../../../components/FormComponents/FormBody"
 import {ComboBoxField, DateField, MoneyField, TextField} from "../../../../../components/FormComponents/Fields"
 import {getNationality} from "../../../../../api/clients/getNationality";
 import {getById, update} from "../../../../../api/loans/crud"
-import {getById as getCarById} from "../../../../../api/cars/crud"
+import {getById as getCarById, getCarsAsOptions} from "../../../../../api/cars/crud"
 import {useRouter} from "next/router";
 import LoansNavBar from "../_components/LoansNavBar";
 import FieldGroup from "../../../../../components/FormComponents/FieldGroup";
@@ -16,21 +16,22 @@ const formValidation = Yup.object().shape({
     creditNumber: Yup.string().nullable().trim().length(5, "Length of Credit Number must be 5 characters").required(`Credit Number is required`),
     startDate: Yup.string().nullable().required(`Start Date is required`),
     totalSum: Yup.number().required(`Total Sum is required`),
-    car: Yup.string().required(`Car is required`),
+    carId: Yup.string().required(`Car is required`),
 })
 
-const CreateLoan = ({SSLoan}) => {
+const CreateLoan = ({SSLoan, SSCar, SSCars}) => {
     const router = useRouter()
     const clientId = router.query.clientId
     const loanId = router.query.id
 
-
+    const [currentCar, setCurrentCar] = useState(SSCar)
     const [options, setOptions] = useState([])
 
     useEffect(() => {
         async function loadOptions() {
             const options = await getNationality()
             setOptions(options)
+            console.log(options)
         }
 
         if (options.length === 0) {
@@ -43,23 +44,21 @@ const CreateLoan = ({SSLoan}) => {
             creditNumber: SSLoan.creditNumber,
             startDate: SSLoan.startDate,
             totalSum: SSLoan.totalSum,
-            car: SSLoan.car.id,
-            brand: SSLoan.car.brand,
-            model: SSLoan.car.model,
-            number: SSLoan.car.number,
-            price: `₽ ${SSLoan.car.price}`,
+            carId: SSLoan.carId,
+            brand: SSCar.brand,
+            model: SSCar.model,
+            number: SSCar.number,
+            price: `₽ ${SSCar.price}`,
         },
         validationSchema: formValidation,
         onSubmit: () => {
-            console.log(formik.values)
-
             update(clientId, loanId, formik.values).then(_ => {
                     router.push({
                         pathname: `/clients/${clientId}/loans/view/${loanId}`,
                     })
                 }
             )
-        }
+        },
     })
 
     return (
@@ -115,58 +114,56 @@ const CreateLoan = ({SSLoan}) => {
 
                 <ComboBoxField
                     label={`Car`}
-                    name={`car`}
+                    name={`carId`}
                     placeholder={`Choose Car`}
-                    value={formik.values.car}
-                    options={options}
+                    value={formik.values.carId}
+                    options={SSCars}
                     handleChange={formik.setFieldValue}
                     handleBlur={formik.handleBlur}
-                    error={formik.errors.car}
+                    error={formik.errors.carId}
+                    onChangeEvent={(newValue) => {
+                        if (newValue.key) {
+                            getCarById(clientId, newValue.key).then(car => {
+                                setCurrentCar(car)
+                            })
+                        } else {
+                            setCurrentCar({
+                                brand: ``,
+                                model: ``,
+                                number: ``,
+                                price: ``,
+                            })
+                        }
+                    }}
                 />
 
                 <FieldGroup label={`Car Values`}>
                     <TextField
                         width={20}
-                        label={`Credit Number`}
-                        name={`creditNumber`}
-                        placeholder={'Input Name'}
-                        value={formik.values.brand}
-                        handleChange={formik.handleChange}
-                        handleBlur={formik.handleBlur}
-                        error={formik.errors.brand}
+                        label={`Brand`}
+                        name={`brand`}
+                        value={currentCar.brand}
                     />
 
                     <TextField
                         width={20}
                         label={`Credit Number`}
                         name={`creditNumber`}
-                        placeholder={'Input Name'}
-                        value={formik.values.model}
-                        handleChange={formik.handleChange}
-                        handleBlur={formik.handleBlur}
-                        error={formik.errors.model}
+                        value={currentCar.model}
                     />
 
                     <TextField
                         width={20}
                         label={`Credit Number`}
                         name={`creditNumber`}
-                        placeholder={'Input Name'}
-                        value={formik.values.number}
-                        handleChange={formik.handleChange}
-                        handleBlur={formik.handleBlur}
-                        error={formik.errors.number}
+                        value={currentCar.number}
                     />
 
                     <TextField
                         width={20}
                         label={`Credit Number`}
                         name={`creditNumber`}
-                        placeholder={'Input Name'}
-                        value={formik.values.price}
-                        handleChange={formik.handleChange}
-                        handleBlur={formik.handleBlur}
-                        error={formik.errors.price}
+                        value={currentCar.price}
                     />
                 </FieldGroup>
             </FormBody>
@@ -176,11 +173,14 @@ const CreateLoan = ({SSLoan}) => {
 
 export const getServerSideProps = async ({query}) => {
     const loan = await getById(query.clientId, query.id)
-    const car = await getCarById(query.clientId, loan.car.id)
+    const car = await getCarById(query.clientId, loan.carId)
+    const cars = await getCarsAsOptions(query.clientId)
 
     return {
         props: {
             SSLoan: loan,
+            SSCar: car,
+            SSCars: cars,
         }
     }
 }

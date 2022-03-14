@@ -3,7 +3,7 @@ package stud.carcredit.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import stud.carcredit.dao.ClientDao;
+import stud.carcredit.dao.CarDao;
 import stud.carcredit.dao.LoanDao;
 import stud.carcredit.exceptions.NotFoundException;
 import stud.carcredit.model.Loan;
@@ -17,12 +17,12 @@ import java.util.Optional;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LoanController {
     private final LoanDao loanDao;
-    private final ClientDao clientDao;
+    private final CarDao carDao;
 
     @Autowired
-    public LoanController(LoanDao loanDao, ClientDao clientDao) {
+    public LoanController(LoanDao loanDao, CarDao carDao) {
         this.loanDao = loanDao;
-        this.clientDao = clientDao;
+        this.carDao = carDao;
     }
 
     @GetMapping("clients/{clientId}/loans")
@@ -35,8 +35,6 @@ public class LoanController {
 
     @GetMapping("clients/{clientId}/loans/{loanId}")
     public Optional<Loan> getById(@PathVariable("loanId") Long id) {
-        System.out.println(id);
-
         return Optional.ofNullable(loanDao.findById(id)
                 .orElseThrow(() -> new NotFoundException("LoanId: " + id + " not found")));
     }
@@ -51,12 +49,13 @@ public class LoanController {
             @PathVariable("loanId") Long loanId,
             @RequestBody Loan loanRequest
     ) {
-        System.out.println(loanRequest.toString());
 
         return loanDao.findById(loanId).map(loan -> {
             loan.setCreditNumber(loanRequest.getCreditNumber());
             loan.setStartDate(loanRequest.getStartDate());
             loan.setTotalSum(loanRequest.getTotalSum());
+            loan.setCar(carDao.findById(loanRequest.getCarId()).get());
+            loan.setCarId(loanRequest.getCarId());
 
             return loanDao.save(loan);
         }).orElseThrow(() -> new NotFoundException("LoanId: " + loanId + " not found"));
