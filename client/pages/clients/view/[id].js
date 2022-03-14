@@ -13,8 +13,6 @@ const ViewClient = ({SSClient, nationality}) => {
 
     const id = router.query.id
 
-    console.log(SSClient)
-
     return (
         <MainLayout title={`View Client`}>
             <ClientsNavBar id={id} />
@@ -81,8 +79,6 @@ export const getServerSideProps = async ({query}) => {
     const client = await getById(query.id)
 
     const options = await getNationality(client.nationality)
-
-    console.log(options[0].label)
 
     return {
         props: {

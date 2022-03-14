@@ -35,7 +35,7 @@ public class CarController {
     }
 
     @GetMapping("clients/{clientId}/cars")
-    public List<Car> findAllBySummitId(@PathVariable Long clientId) {
+    public List<Car> findAllByClientId(@PathVariable Long clientId) {
         return carDao.findByClientId(clientId)
                 .orElseThrow(() -> new NotFoundException("ClientId: " + clientId + " not found"));
     }

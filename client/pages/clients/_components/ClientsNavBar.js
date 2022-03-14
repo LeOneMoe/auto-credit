@@ -9,7 +9,7 @@ const ClientsNavBar = ({
         <NavigationBar>
             <ModulePanel name={`Clients`} href={`/clients`} as={`/clients`} isCurrent/>
             {childPanelsEnabled &&
-                <ModulePanel name={`Clients View ${id}`} href={`/clients/view/[id]`} as={`/clients/view/${id}`}/>
+                <ModulePanel name={`Loans`} href={`/clients/[clientId]/loans/`} as={`/clients/${id}/loans/`}/>
             }
         </NavigationBar>
     )

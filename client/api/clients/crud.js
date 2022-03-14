@@ -1,8 +1,6 @@
 import axios from "axios";
 
 const getById = async (id) => {
-    console.log(`http://localhost:8080/clients/${id}`)
-
     return await axios.get(`http://localhost:8080/clients/${id}`).then(data => data.data)
 }
 

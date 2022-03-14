@@ -42,7 +42,6 @@ const SearchPosts = () => {
         },
         validationSchema: formValidation,
         onSubmit: () => {
-            console.log(formik.values)
             // router.push({
             //     pathname: `/posts`,
             //     query: formik.values

@@ -1,5 +1,6 @@
 package stud.carcredit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,9 +25,14 @@ public class Car extends AuditModel {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "client_id", nullable = false) // name of the foreign key column
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Client client;
 
+    @OneToOne(mappedBy = "car")
+    private Loan loan;
+
     private String brand;
+
 
     private String model;
 
@@ -36,7 +42,7 @@ public class Car extends AuditModel {
     @Column(name = "day_of_purchase")
     private Date dateOfPurchase;
 
-    @Column(name = "purchase_price")
+    @Column(name = "price")
     @Digits(integer = 10, fraction = 2)
-    private BigDecimal purchasePrice;
+    private BigDecimal price;
 }

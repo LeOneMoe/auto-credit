@@ -1,25 +1,23 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import {MainLayout} from "../../../components/MainLayout";
+import {MainLayout} from "../../components/MainLayout";
 import {useEffect, useState} from "react";
 
-import {FormBody} from "../../../components/FormComponents/FormBody"
-import {ComboBoxField, DateField, TextField} from "../../../components/FormComponents/Fields"
-import {getNationality} from "../../../api/clients/getNationality";
-import {getById, update} from "../../../api/clients/crud"
+import {FormBody} from "../../components/FormComponents/FormBody"
+import {ComboBoxField, DateField, TextField} from "../../components/FormComponents/Fields"
+import {getNationality} from "../../api/clients/getNationality";
 import {useRouter} from "next/router";
-import ClientsNavBar from "../_components/ClientsNavBar";
+import LoansNavBar from "./_components/ClientsNavBar";
 
 const formValidation = Yup.object().shape({
-    name: Yup.string().trim().max(30, `Too Long`).min(3, `Too Short`).required(`Name is required`),
-    dateOfBirth: Yup.string().nullable().required(`Date of Birth is required`),
-    passportNumber: Yup.string().min(10, `Passport number is too short`).required(`Passport Number is required`),
-    nationality: Yup.string().required(`Nationality is required`),
+    name: Yup.string().trim(),
+    dateOfBirth: Yup.string().nullable(),
+    passportNumber: Yup.string(),
+    nationality: Yup.string(),
 })
 
-const CreateClient = ({SSClient}) => {
+const FindLoans = () => {
     const router = useRouter()
-    const id = router.query.id
 
     const [options, setOptions] = useState([])
 
@@ -36,41 +34,34 @@ const CreateClient = ({SSClient}) => {
 
     const formik = useFormik({
         initialValues: {
-            name: SSClient.name,
-            dateOfBirth: SSClient.dateOfBirth,
-            passportNumber: SSClient.passportNumber,
-            nationality: SSClient.nationality,
+            name: ``,
+            dateOfBirth: ``,
+            passportNumber: ``,
+            nationality: ``,
         },
         validationSchema: formValidation,
         onSubmit: () => {
-            update(id, formik.values).then(_ => {
-                    router.push({
-                        pathname: `/clients/view/${id}`,
-                    })
-                }
-            )
+            router.push({
+                pathname: `/clients`,
+                query: formik.values
+            })
         }
     })
 
     return (
-        <MainLayout title={`Edit Client`}>
-            <ClientsNavBar id={id} />
+        <MainLayout title={`Search Posts`}>
+            <LoansNavBar childPanelsEnabled={false}/>
 
             <FormBody
-                submitEnabled
-                searchEnabled
-                createEnabled
+                isSearchMode
 
-                onSearch={() => router.push({
-                    pathname: `/clients/search`
-                })}
+                createEnabled
 
                 onCreate={() => router.push({
                     pathname: `/clients/create`
                 })}
 
                 onSubmit={formik.handleSubmit}
-
             >
                 <TextField
                     width={20}
@@ -119,14 +110,4 @@ const CreateClient = ({SSClient}) => {
     )
 }
 
-export const getServerSideProps = async ({query}) => {
-    const client = await getById(query.id)
-
-    return {
-        props: {
-            SSClient: client,
-        }
-    }
-}
-
-export default CreateClient
+export default FindLoans
