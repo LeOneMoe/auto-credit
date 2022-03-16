@@ -33,7 +33,8 @@ function NumberField({
                          handleBlur,
                          error,
                          width = 20,
-                         disabled = false
+                         disabled = false,
+                         readOnly = false
                      }) {
     return (
 
@@ -52,6 +53,8 @@ function NumberField({
                     onBlur={handleBlur}
                     inputComponent={NumberFormatCustom}
                     disabled={disabled}
+
+                    readOnly={readOnly}
                 />
             </div>
 

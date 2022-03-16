@@ -159,7 +159,7 @@ const CreateLoan = ({SSCars}) => {
 }
 
 export const getServerSideProps = async ({query}) => {
-    const cars = await getCarsAsOptions(query.clientId)
+    const cars = await getCarsAsOptions(query.clientId, )
 
     return {
         props: {

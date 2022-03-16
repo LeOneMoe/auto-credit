@@ -27,7 +27,7 @@ const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, r
     );
 });
 
-function MoneyField({label, name, placeholder, value, handleChange, handleBlur, error, width = 20, disabled = false}) {
+function MoneyField({label, name, placeholder, value, handleChange, handleBlur, error, width = 20, disabled = false, readOnly = false}) {
     return (
 
         <div className={classes.field}>
@@ -45,6 +45,7 @@ function MoneyField({label, name, placeholder, value, handleChange, handleBlur, 
                     onBlur={handleBlur}
                     inputComponent={NumberFormatCustom}
                     disabled={disabled}
+                    readOnly={readOnly}
                 />
             </div>
 

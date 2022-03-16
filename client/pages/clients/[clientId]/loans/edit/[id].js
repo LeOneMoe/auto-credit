@@ -23,6 +23,8 @@ const CreateLoan = ({SSLoan, SSCar, SSCars}) => {
     const clientId = router.query.clientId
     const loanId = router.query.id
 
+    console.log(SSCars)
+
     const [currentCar, setCurrentCar] = useState(SSCar)
 
     const formik = useFormik({
@@ -156,7 +158,7 @@ const CreateLoan = ({SSLoan, SSCar, SSCars}) => {
 export const getServerSideProps = async ({query}) => {
     const loan = await getById(query.clientId, query.id)
     const car = await getCarById(query.clientId, loan.carId)
-    const cars = await getCarsAsOptions(query.clientId)
+    const cars = await getCarsAsOptions(query.clientId, car.id)
 
     return {
         props: {

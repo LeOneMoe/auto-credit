@@ -68,7 +68,7 @@ const ComboBoxField = ({
                     value={initOption}
 
                     options={options}
-                    getOptionLabel={option => option.label}
+                    getOptionLabel={(option) => option.label ?? option}
 
                     name={name}
                     isOptionEqualToValue={(option, value) => option.key === value.key}

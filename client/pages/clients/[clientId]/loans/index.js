@@ -13,7 +13,7 @@ import {getOptionLabel} from "../../../../util/Options";
 import LoansNavBar from "./_components/LoansNavBar";
 import Toolbar from "../../../../components/FormComponents/Toolbar";
 
-const ListLoans = ({SSLoans, options}) => {
+const ListLoans = ({SSLoans}) => {
     const router = useRouter();
 
     const clientId = router.query.clientId
@@ -48,7 +48,7 @@ const ListLoans = ({SSLoans, options}) => {
                                 })
                             }
                             onDelete={() => {
-                                deleteById(loan.id).then(_ => router.reload())
+                                deleteById(clientId, loan.id).then(_ => router.reload())
                             }}
                         >
                             <TableCell>{loan.creditNumber}</TableCell>
@@ -65,12 +65,9 @@ const ListLoans = ({SSLoans, options}) => {
 export const getServerSideProps = async ({query}) => {
     const loans = await getAll(query.clientId, query)
 
-    const options = await getNationality()
-
     return {
         props: {
             SSLoans: loans,
-            options: options
         }
     }
 }

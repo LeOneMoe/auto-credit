@@ -7,7 +7,6 @@ import stud.carcredit.dao.CarDao;
 import stud.carcredit.dao.ClientDao;
 import stud.carcredit.dao.LoanDao;
 import stud.carcredit.exceptions.NotFoundException;
-import stud.carcredit.model.Client;
 import stud.carcredit.model.Loan;
 
 import javax.validation.Valid;
@@ -74,6 +73,8 @@ public class LoanController {
 
     @DeleteMapping("clients/{clientId}/loans/{loanId}")
     public ResponseEntity<?> delete(@PathVariable("loanId") Long id) {
+        System.out.println(id);
+
         return loanDao.findById(id).map(loan -> {
             loanDao.delete(loan);
             return ResponseEntity.ok().build();

@@ -6,6 +6,8 @@ import {useRouter} from "next/router";
 import LoansNavBar from "../_components/LoansNavBar";
 import {getById as getCarById} from "../../../../../api/cars/crud";
 import FieldGroup from "../../../../../components/FormComponents/FieldGroup";
+import {MoneyField} from "../../../../../components/FormComponents/Fields";
+import {toIsoString} from "../../../../../util/DateUtil";
 
 const ViewLoan = ({SSLoan, SSCar}) => {
     const router = useRouter()
@@ -49,12 +51,13 @@ const ViewLoan = ({SSLoan, SSCar}) => {
 
                 <TextField
                     label={`Start Date`}
-                    value={SSLoan.startDate}
+                    value={toIsoString(SSLoan.startDate)}
                 />
 
-                <TextField
+                <MoneyField
                     label={`Total Sum`}
                     value={SSLoan.totalSum}
+                    readOnly
                 />
 
                 <TextField

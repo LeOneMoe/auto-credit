@@ -4,8 +4,8 @@ const getById = async (clientId, carId) => {
     return await axios.get(`http://localhost:8080/clients/${clientId}/cars/${carId}`).then(data => data.data)
 }
 
-const getCarsAsOptions = async (clientId) => {
-    const cars = await axios.get(`http://localhost:8080/clients/${clientId}/cars`).then(data => data.data)
+const getCarsAsOptions = async (clientId, carId) => {
+    const cars = await axios.get(`http://localhost:8080/clients/${clientId}/cars/unused`, {params: {currentCar: carId}}).then(data => data.data)
     const options = []
 
     for (const carsKey in cars) {
@@ -14,6 +14,8 @@ const getCarsAsOptions = async (clientId) => {
             label: `${cars[carsKey].number} ${cars[carsKey].brand} ${cars[carsKey].model}`
         })
     }
+
+    console.log(options)
 
     return options
 }

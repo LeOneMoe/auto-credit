@@ -21,9 +21,10 @@ public interface CarDao extends JpaRepository<Car, Long> {
     @Query(
             "select c from Car c " +
                     "left join Loan l on c.id = l.carId " +
-                    "where l.carId is null and c.clientId = :clientId"
+                    "where l.carId is null " +
+                    "and c.clientId = :clientId or c.id = :carId"
     )
-    List<Car> findUnused(@Param("clientId") Long clientId);
+    List<Car> findUnused(@Param("clientId") Long clientId, @Param("carId") Long carId);
 
     Optional<List<Car>> findByClientId(Long clientId);
 }

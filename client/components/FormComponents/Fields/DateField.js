@@ -37,7 +37,8 @@ const DateField = ({
                        error,
                        inputFormat,
                        width = 20,
-                       disabled = false
+                       disabled = false,
+                       readOnly = false
                    }) => {
     const [open, setOpen] = useState(false);
 
@@ -63,6 +64,7 @@ const DateField = ({
                             <DateInput {...params} placeholder={`1234213`}/>
                         }
                         disabled={disabled}
+                        readOnly={readOnly}
                     />
                 </LocalizationProvider>
 
