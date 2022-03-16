@@ -1,48 +1,41 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {MainLayout} from "../../../../components/MainLayout";
-import {useEffect, useState} from "react";
 
 import {FormBody} from "../../../../components/FormComponents/FormBody"
-import {ComboBoxField, DateField, TextField} from "../../../../components/FormComponents/Fields"
-import {getNationality} from "../../../../api/clients/getNationality";
+import {ComboBoxField, TextField} from "../../../../components/FormComponents/Fields"
 import {useRouter} from "next/router";
 import LoansNavBar from "./_components/LoansNavBar";
+import {getAllCarsAsOptions, getById as getCarById} from "../../../../api/cars/crud";
+import FieldGroup from "../../../../components/FormComponents/FieldGroup";
+import {useState} from "react";
 
 const formValidation = Yup.object().shape({
-    name: Yup.string().trim(),
-    dateOfBirth: Yup.string().nullable(),
-    passportNumber: Yup.string(),
-    nationality: Yup.string(),
+    creditNumber: Yup.string().nullable().trim(),
+    carId: Yup.string(),
 })
 
-const FindLoans = () => {
+const FindLoans = ({SSCars}) => {
     const router = useRouter()
 
-    const [options, setOptions] = useState([])
+    const clientId = router.query.clientId
 
-    useEffect(() => {
-        async function loadOptions() {
-            const options = await getNationality()
-            setOptions(options)
-        }
-
-        if (options.length === 0) {
-            loadOptions()
-        }
+    const [currentCar, setCurrentCar] = useState({
+        brand: ``,
+        model: ``,
+        number: ``,
+        price: ``,
     })
 
     const formik = useFormik({
         initialValues: {
-            name: ``,
-            dateOfBirth: ``,
-            passportNumber: ``,
-            nationality: ``,
+            creditNumber: ``,
+            carId: ``,
         },
         validationSchema: formValidation,
         onSubmit: () => {
             router.push({
-                pathname: `/clients`,
+                pathname: `/clients/${clientId}/loans`,
                 query: formik.values
             })
         }
@@ -50,7 +43,7 @@ const FindLoans = () => {
 
     return (
         <MainLayout title={`Search Posts`}>
-            <LoansNavBar childPanelsEnabled={false}/>
+            <LoansNavBar childPanelsEnabled={false} id={clientId}/>
 
             <FormBody
                 isSearchMode
@@ -64,50 +57,82 @@ const FindLoans = () => {
                 onSubmit={formik.handleSubmit}
             >
                 <TextField
-                    width={20}
-                    label={`Name`}
-                    name={`name`}
-                    placeholder={'Input Name'}
-                    value={formik.values.name}
+                    label={`Credit Number`}
+                    name={`creditNumber`}
+                    placeholder={'Input Credit Number'}
+                    value={formik.values.creditNumber}
                     handleChange={formik.handleChange}
                     handleBlur={formik.handleBlur}
-                    error={formik.errors.name}
-                />
-
-                <DateField
-                    label={`Date Of Birth`}
-                    name={`dateOfBirth`}
-                    inputFormat={`dd/MM/yyyy`}
-                    value={formik.values.dateOfBirth}
-                    handleChange={formik.setFieldValue}
-                    handleBlur={formik.handleBlur}
-                    error={formik.errors.dateOfBirth}
-                />
-
-                <TextField
-                    width={20}
-                    label={`Passport Number`}
-                    name={`passportNumber`}
-                    placeholder={'Input Passport Number'}
-                    value={formik.values.passportNumber}
-                    handleChange={formik.handleChange}
-                    handleBlur={formik.handleBlur}
-                    error={formik.errors.passportNumber}
+                    error={formik.errors.creditNumber}
                 />
 
                 <ComboBoxField
-                    label={`Nationality`}
-                    name={`nationality`}
-                    placeholder={`Choose Nationality`}
-                    value={formik.values.nationality}
-                    options={options}
+                    label={`Car`}
+                    name={`carId`}
+                    placeholder={`Choose Car`}
+                    value={formik.values.carId}
+                    options={SSCars}
                     handleChange={formik.setFieldValue}
                     handleBlur={formik.handleBlur}
-                    error={formik.errors.nationality}
+                    error={formik.errors.carId}
+                    onChangeEvent={(newValue) => {
+                        if (newValue.key) {
+                            getCarById(clientId, newValue.key).then(car => {
+                                setCurrentCar(car)
+                            })
+                        } else {
+                            setCurrentCar({
+                                brand: ``,
+                                model: ``,
+                                number: ``,
+                                price: ``,
+                            })
+                        }
+                    }}
                 />
+
+                <FieldGroup label={`Car Values`}>
+                    <TextField
+                        width={20}
+                        label={`Brand`}
+                        name={`brand`}
+                        value={currentCar.brand}
+                    />
+
+                    <TextField
+                        width={20}
+                        label={`Model`}
+                        name={`model`}
+                        value={currentCar.model}
+                    />
+
+                    <TextField
+                        width={20}
+                        label={`Number`}
+                        name={`number`}
+                        value={currentCar.number}
+                    />
+
+                    <TextField
+                        width={20}
+                        label={`Price`}
+                        name={`price`}
+                        value={`₽ ${currentCar.price}`}
+                    />
+                </FieldGroup>
             </FormBody>
         </MainLayout>
     )
+}
+
+export const getServerSideProps = async ({query}) => {
+    const cars = await getAllCarsAsOptions(query.clientId)
+
+    return {
+        props: {
+            SSCars: cars,
+        }
+    }
 }
 
 export default FindLoans

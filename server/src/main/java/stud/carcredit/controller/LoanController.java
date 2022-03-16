@@ -29,10 +29,16 @@ public class LoanController {
     }
 
     @GetMapping("clients/{clientId}/loans")
-    public List<Loan> getAll(@PathVariable("clientId") Long clientId) {
-        return loanDao.findByClientId(clientId);
+    public List<Loan> find(
+            Loan loan,
+            @PathVariable("clientId") Long clientId
+    ) {
+        return loanDao.find(
+                loan.getCreditNumber(),
+                loan.getCarId(),
+                clientId
+        );
     }
-
 
     @GetMapping("clients/{clientId}/loans/{loanId}")
     public Optional<Loan> getById(@PathVariable("loanId") Long id) {

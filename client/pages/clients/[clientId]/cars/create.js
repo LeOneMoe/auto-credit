@@ -1,50 +1,39 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {MainLayout} from "../../../../components/MainLayout";
-import {useEffect, useState} from "react";
 
 import {FormBody} from "../../../../components/FormComponents/FormBody"
-import {ComboBoxField, DateField, TextField} from "../../../../components/FormComponents/Fields"
-import {getNationality} from "../../../../api/clients/getNationality";
-import {create} from "../../../../api/clients/crud"
+import {DateField, MoneyField, TextField} from "../../../../components/FormComponents/Fields"
+import {create} from "../../../../api/cars/crud"
 import {useRouter} from "next/router";
 import CarsNavBar from "./_components/CarsNavBar";
 
 const formValidation = Yup.object().shape({
-    name: Yup.string().trim().max(30, `Too Long`).min(3, `Too Short`).required(`Name is required`),
-    dateOfBirth: Yup.string().nullable().required(`Date of Birth is required`),
-    passportNumber: Yup.string().min(10, `Passport number is too short`).required(`Passport Number is required`),
-    nationality: Yup.string().required(`Nationality is required`),
+    brand: Yup.string().nullable().trim().required(`Brand is required`),
+    model: Yup.string().nullable().trim().required(`Model is required`),
+    number: Yup.string().nullable().trim().required(`Number is required`),
+    price: Yup.number().required(`Price is required`),
+    dateOfPurchase: Yup.string().nullable(),
 })
 
 const CreateCar = () => {
     const router = useRouter()
 
-    const [options, setOptions] = useState([])
-
-    useEffect(() => {
-        async function loadOptions() {
-            const options = await getNationality()
-            setOptions(options)
-        }
-
-        if (options.length === 0) {
-            loadOptions()
-        }
-    })
+    const clientId = router.query.clientId
 
     const formik = useFormik({
         initialValues: {
-            name: ``,
-            dateOfBirth: ``,
-            passportNumber: ``,
-            nationality: ``,
+            brand: ``,
+            model: ``,
+            number: ``,
+            price: ``,
+            dateOfPurchase: ``,
         },
         validationSchema: formValidation,
         onSubmit: () => {
-            create(formik.values).then(r =>
+            create(clientId, formik.values).then(r =>
                 router.push({
-                    pathname: `/clients/view/${r.id}`,
+                    pathname: `/clients/${clientId}/cars/view/${r.id}`,
                 })
             )
         }
@@ -52,63 +41,70 @@ const CreateCar = () => {
 
     return (
         <MainLayout title={`Search Posts`}>
-            <CarsNavBar childPanelsEnabled={false} />
+            <CarsNavBar childPanelsEnabled={false} id={clientId}/>
 
             <FormBody
                 searchEnabled
                 submitEnabled
 
                 onCreate={() => router.push({
-                    pathname: `/clients/create`
+                    pathname: `/clients/${clientId}/cars/create`
                 })}
 
                 onSearch={() => router.push({
-                    pathname: `/clients/search`
+                    pathname: `/clients/${clientId}/cars/search`
                 })}
 
                 onSubmit={formik.handleSubmit}
             >
                 <TextField
-                    width={20}
-                    label={`Name`}
-                    name={`name`}
-                    placeholder={'Input Name'}
-                    value={formik.values.name}
+                    label={`Brand`}
+                    name={`brand`}
+                    placeholder={'Input Brand'}
+                    value={formik.values.brand}
                     handleChange={formik.handleChange}
                     handleBlur={formik.handleBlur}
-                    error={formik.errors.name}
-                />
-
-                <DateField
-                    label={`Date Of Birth`}
-                    name={`dateOfBirth`}
-                    inputFormat={`dd/MM/yyyy`}
-                    value={formik.values.dateOfBirth}
-                    handleChange={formik.setFieldValue}
-                    handleBlur={formik.handleBlur}
-                    error={formik.errors.dateOfBirth}
+                    error={formik.errors.brand}
                 />
 
                 <TextField
-                    width={20}
-                    label={`Passport Number`}
-                    name={`passportNumber`}
-                    placeholder={'Input Passport Number'}
-                    value={formik.values.passportNumber}
+                    label={`Model`}
+                    name={`model`}
+                    placeholder={'Input Model'}
+                    value={formik.values.model}
                     handleChange={formik.handleChange}
                     handleBlur={formik.handleBlur}
-                    error={formik.errors.passportNumber}
+                    error={formik.errors.model}
                 />
 
-                <ComboBoxField
-                    label={`Nationality`}
-                    name={`nationality`}
-                    placeholder={`Choose Nationality`}
-                    value={formik.values.nationality}
-                    options={options}
+                <TextField
+                    label={`Number`}
+                    name={`number`}
+                    placeholder={'Input Number'}
+                    value={formik.values.number}
+                    handleChange={formik.handleChange}
+                    handleBlur={formik.handleBlur}
+                    error={formik.errors.number}
+                />
+
+                <MoneyField
+                    label={`Price`}
+                    name={`price`}
+                    placeholder={'₽ 0.00'}
+                    value={formik.values.price}
+                    handleChange={formik.handleChange}
+                    handleBlur={formik.handleBlur}
+                    error={formik.errors.price}
+                />
+
+                <DateField
+                    label={`Date Of Purchase`}
+                    name={`dateOfPurchase`}
+                    inputFormat={`dd/MM/yyyy`}
+                    value={formik.values.dateOfPurchase}
                     handleChange={formik.setFieldValue}
                     handleBlur={formik.handleBlur}
-                    error={formik.errors.nationality}
+                    error={formik.errors.dateOfPurchase}
                 />
             </FormBody>
         </MainLayout>

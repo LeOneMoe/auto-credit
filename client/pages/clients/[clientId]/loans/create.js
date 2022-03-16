@@ -8,7 +8,7 @@ import {ComboBoxField, DateField, MoneyField, TextField} from "../../../../compo
 import {useRouter} from "next/router";
 import LoansNavBar from "./_components/LoansNavBar";
 import {create} from "../../../../api/loans/crud";
-import {getById as getCarById, getCarsAsOptions} from "../../../../api/cars/crud";
+import {getById as getCarById, getUnusedCarsAsOptions} from "../../../../api/cars/crud";
 import FieldGroup from "../../../../components/FormComponents/FieldGroup";
 
 const formValidation = Yup.object().shape({
@@ -21,7 +21,6 @@ const formValidation = Yup.object().shape({
 const CreateLoan = ({SSCars}) => {
     const router = useRouter()
     const clientId = router.query.clientId
-    const loanId = router.query.id
 
     const [currentCar, setCurrentCar] = useState({
         brand: ``,
@@ -159,7 +158,7 @@ const CreateLoan = ({SSCars}) => {
 }
 
 export const getServerSideProps = async ({query}) => {
-    const cars = await getCarsAsOptions(query.clientId, )
+    const cars = await getUnusedCarsAsOptions(query.clientId,)
 
     return {
         props: {

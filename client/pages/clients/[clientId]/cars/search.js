@@ -1,48 +1,33 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {MainLayout} from "../../../../components/MainLayout";
-import {useEffect, useState} from "react";
 
 import {FormBody} from "../../../../components/FormComponents/FormBody"
-import {ComboBoxField, DateField, TextField} from "../../../../components/FormComponents/Fields"
-import {getNationality} from "../../../../api/clients/getNationality";
+import {TextField} from "../../../../components/FormComponents/Fields"
 import {useRouter} from "next/router";
 import CarsNavBar from "./_components/CarsNavBar";
 
 const formValidation = Yup.object().shape({
-    name: Yup.string().trim(),
-    dateOfBirth: Yup.string().nullable(),
-    passportNumber: Yup.string(),
-    nationality: Yup.string(),
+    brand: Yup.string().nullable().trim(),
+    model: Yup.string().nullable().trim(),
+    number: Yup.string().nullable().trim(),
 })
 
 const FindCars = () => {
     const router = useRouter()
 
-    const [options, setOptions] = useState([])
-
-    useEffect(() => {
-        async function loadOptions() {
-            const options = await getNationality()
-            setOptions(options)
-        }
-
-        if (options.length === 0) {
-            loadOptions()
-        }
-    })
+    const clientId = router.query.clientId
 
     const formik = useFormik({
         initialValues: {
-            name: ``,
-            dateOfBirth: ``,
-            passportNumber: ``,
-            nationality: ``,
+            brand: ``,
+            model: ``,
+            number: ``,
         },
         validationSchema: formValidation,
         onSubmit: () => {
             router.push({
-                pathname: `/clients`,
+                pathname: `/clients/${clientId}/cars`,
                 query: formik.values
             })
         }
@@ -50,7 +35,7 @@ const FindCars = () => {
 
     return (
         <MainLayout title={`Search Posts`}>
-            <CarsNavBar childPanelsEnabled={false}/>
+            <CarsNavBar childPanelsEnabled={false} id={clientId}/>
 
             <FormBody
                 isSearchMode
@@ -64,46 +49,33 @@ const FindCars = () => {
                 onSubmit={formik.handleSubmit}
             >
                 <TextField
-                    width={20}
-                    label={`Name`}
-                    name={`name`}
-                    placeholder={'Input Name'}
-                    value={formik.values.name}
+                    label={`Brand`}
+                    name={`brand`}
+                    placeholder={'Input Brand'}
+                    value={formik.values.brand}
                     handleChange={formik.handleChange}
                     handleBlur={formik.handleBlur}
-                    error={formik.errors.name}
-                />
-
-                <DateField
-                    label={`Date Of Birth`}
-                    name={`dateOfBirth`}
-                    inputFormat={`dd/MM/yyyy`}
-                    value={formik.values.dateOfBirth}
-                    handleChange={formik.setFieldValue}
-                    handleBlur={formik.handleBlur}
-                    error={formik.errors.dateOfBirth}
+                    error={formik.errors.brand}
                 />
 
                 <TextField
-                    width={20}
-                    label={`Passport Number`}
-                    name={`passportNumber`}
-                    placeholder={'Input Passport Number'}
-                    value={formik.values.passportNumber}
+                    label={`Model`}
+                    name={`model`}
+                    placeholder={'Input Model'}
+                    value={formik.values.model}
                     handleChange={formik.handleChange}
                     handleBlur={formik.handleBlur}
-                    error={formik.errors.passportNumber}
+                    error={formik.errors.model}
                 />
 
-                <ComboBoxField
-                    label={`Nationality`}
-                    name={`nationality`}
-                    placeholder={`Choose Nationality`}
-                    value={formik.values.nationality}
-                    options={options}
-                    handleChange={formik.setFieldValue}
+                <TextField
+                    label={`Number`}
+                    name={`number`}
+                    placeholder={'Input Number'}
+                    value={formik.values.number}
+                    handleChange={formik.handleChange}
                     handleBlur={formik.handleBlur}
-                    error={formik.errors.nationality}
+                    error={formik.errors.number}
                 />
             </FormBody>
         </MainLayout>

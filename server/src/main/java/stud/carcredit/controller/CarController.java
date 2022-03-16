@@ -25,14 +25,24 @@ public class CarController {
         this.clientDao = clientDao;
     }
 
-    @GetMapping
-    public List<Car> getAll(Car car) {
+    @GetMapping("clients/{clientId}/cars")
+    public List<Car> find(
+            Car car,
+            @PathVariable Long clientId
+    ) {
         return carDao.find(
                 car.getBrand(),
                 car.getModel(),
-                car.getNumber()
+                car.getNumber(),
+                clientId
         );
     }
+
+//    @GetMapping("clients/{clientId}/cars")
+//    public List<Car> findAllByClientId(@PathVariable Long clientId) {
+//        return carDao.findByClientId(clientId)
+//                .orElseThrow(() -> new NotFoundException("ClientId: " + clientId + " not found"));
+//    }
 
     @GetMapping("clients/{clientId}/cars/unused")
     public List<Car> findUnused(
@@ -43,12 +53,6 @@ public class CarController {
         System.out.println(currentCar);
 
         return carDao.findUnused(clientId, currentCar);
-    }
-
-    @GetMapping("clients/{clientId}/cars")
-    public List<Car> findAllByClientId(@PathVariable Long clientId) {
-        return carDao.findByClientId(clientId)
-                .orElseThrow(() -> new NotFoundException("ClientId: " + clientId + " not found"));
     }
 
     @GetMapping("clients/{clientId}/cars/{carId}")
@@ -67,26 +71,27 @@ public class CarController {
         }).orElseThrow(() -> new NotFoundException("ClientId: " + clientId + " not found"));
     }
 
-    @PutMapping("{id}")
+    @PutMapping("clients/{clientId}/cars/{carId}")
     public Car update(
-            @PathVariable Long id,
-            @Valid @RequestBody Car carRequest
+            @Valid @RequestBody Car carRequest,
+            @PathVariable Long carId
     ) {
-        return carDao.findById(id).map(car -> {
+        return carDao.findById(carId).map(car -> {
             car.setBrand(carRequest.getBrand());
             car.setModel(carRequest.getModel());
             car.setNumber(carRequest.getNumber());
+            car.setPrice(carRequest.getPrice());
             car.setDateOfPurchase(carRequest.getDateOfPurchase());
 
             return carDao.save(car);
-        }).orElseThrow(() -> new NotFoundException("CarId: " + id + " not found"));
+        }).orElseThrow(() -> new NotFoundException("CarId: " + carId + " not found"));
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        return carDao.findById(id).map(car -> {
+    @DeleteMapping("clients/{clientId}/cars/{carId}")
+    public ResponseEntity<?> delete(@PathVariable Long carId) {
+        return carDao.findById(carId).map(car -> {
             carDao.delete(car);
             return ResponseEntity.ok().build();
-        }).orElseThrow(() -> new NotFoundException("CarId: " + id + " not found"));
+        }).orElseThrow(() -> new NotFoundException("CarId: " + carId + " not found"));
     }
 }

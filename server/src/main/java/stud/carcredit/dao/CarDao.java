@@ -12,11 +12,17 @@ import java.util.Optional;
 public interface CarDao extends JpaRepository<Car, Long> {
     @Query(
             "select c from Car c " +
-                    "where :brand is null or c.brand like concat('%', :brand, '%') " +
-                    "and :model is null or c.model like concat('%', :model, '%') " +
-                    "and :number is null or c.number like concat('%', :number, '%')"
+                    "where (:brand is null or c.brand like concat('%', :brand, '%')) " +
+                    "and (:model is null or c.model like concat('%', :model, '%')) " +
+                    "and (:number is null or c.number like concat('%', :number, '%')) " +
+                    "and :clientId = c.clientId"
     )
-    List<Car> find(@Param("brand") String brand, @Param("model") String model, @Param("number") String number);
+    List<Car> find(
+            @Param("brand") String brand,
+            @Param("model") String model,
+            @Param("number") String number,
+            @Param("clientId") Long clientId
+    );
 
     @Query(
             "select c from Car c " +

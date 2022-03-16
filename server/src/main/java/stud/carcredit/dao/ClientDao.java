@@ -14,5 +14,9 @@ public interface ClientDao extends JpaRepository<Client, Long> {
                     "and (:passportNumber is null or c.passportNumber like concat('%', :passportNumber, '%')) " +
                     "and (:nationality is null or c.nationality = :nationality)"
     )
-    List<Client> find(@Param("name") String name, @Param("passportNumber") String passportNumber, @Param("nationality") String nationality);
+    List<Client> find(
+            @Param("name") String name,
+            @Param("passportNumber") String passportNumber,
+            @Param("nationality") String nationality
+    );
 }

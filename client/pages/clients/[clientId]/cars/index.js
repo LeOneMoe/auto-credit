@@ -12,7 +12,7 @@ import {useRouter} from "next/router";
 import CarsNavBar from "./_components/CarsNavBar";
 import Toolbar from "../../../../components/FormComponents/Toolbar";
 
-const ListCars = ({SSCars, options}) => {
+const ListCars = ({SSCars}) => {
     const router = useRouter();
 
     const clientId = router.query.clientId
@@ -24,8 +24,8 @@ const ListCars = ({SSCars, options}) => {
             <Toolbar
                 searchEnabled
                 createEnabled
-                onSearch={() => router.push(`/clients/search`)}
-                onCreate={() => router.push(`/clients/create`)}
+                onSearch={() => router.push(`/clients/${clientId}/cars/search`)}
+                onCreate={() => router.push(`/clients/${clientId}/cars/create`)}
             />
 
             <Table>

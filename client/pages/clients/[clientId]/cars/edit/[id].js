@@ -1,54 +1,33 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {MainLayout} from "../../../../../components/MainLayout";
-import {useEffect, useState} from "react";
 
 import {FormBody} from "../../../../../components/FormComponents/FormBody"
-import {ComboBoxField, DateField, MoneyField, TextField} from "../../../../../components/FormComponents/Fields"
-import {getNationality} from "../../../../../api/clients/getNationality";
+import {DateField, MoneyField, TextField} from "../../../../../components/FormComponents/Fields"
 import {getById, update} from "../../../../../api/cars/crud"
-import {getById as getCarById, getCarsAsOptions} from "../../../../../api/cars/crud"
 import {useRouter} from "next/router";
 import CarsNavBar from "../_components/CarsNavBar";
-import FieldGroup from "../../../../../components/FormComponents/FieldGroup";
 
 const formValidation = Yup.object().shape({
-    creditNumber: Yup.string().nullable().trim().length(5, "Length of Credit Number must be 5 characters").required(`Credit Number is required`),
-    startDate: Yup.string().nullable().required(`Start Date is required`),
-    totalSum: Yup.number().required(`Total Sum is required`),
-    carId: Yup.string().required(`Car is required`),
+    brand: Yup.string().nullable().trim().required(`Brand is required`),
+    model: Yup.string().nullable().trim().required(`Model is required`),
+    number: Yup.string().nullable().trim().required(`Number is required`),
+    price: Yup.number().required(`Price is required`),
+    dateOfPurchase: Yup.string().nullable().required(`Date of Purchase is required`),
 })
 
-const CreateCar = ({SSCar, SSCar, SSCars}) => {
+const CreateCar = ({SSCar}) => {
     const router = useRouter()
     const clientId = router.query.clientId
     const carId = router.query.id
 
-    const [currentCar, setCurrentCar] = useState(SSCar)
-    const [options, setOptions] = useState([])
-
-    useEffect(() => {
-        async function loadOptions() {
-            const options = await getNationality()
-            setOptions(options)
-            console.log(options)
-        }
-
-        if (options.length === 0) {
-            loadOptions()
-        }
-    })
-
     const formik = useFormik({
         initialValues: {
-            creditNumber: SSCar.creditNumber,
-            startDate: SSCar.startDate,
-            totalSum: SSCar.totalSum,
-            carId: SSCar.carId,
             brand: SSCar.brand,
             model: SSCar.model,
             number: SSCar.number,
-            price: `₽ ${SSCar.price}`,
+            price: SSCar.price,
+            dateOfPurchase: SSCar.dateOfPurchase,
         },
         validationSchema: formValidation,
         onSubmit: () => {
@@ -82,89 +61,54 @@ const CreateCar = ({SSCar, SSCar, SSCars}) => {
 
             >
                 <TextField
-                    label={`Credit Number`}
-                    name={`creditNumber`}
-                    placeholder={'Input Name'}
-                    value={formik.values.creditNumber}
+                    label={`Brand`}
+                    name={`brand`}
+                    placeholder={'Input Brand'}
+                    value={formik.values.brand}
                     handleChange={formik.handleChange}
                     handleBlur={formik.handleBlur}
-                    error={formik.errors.creditNumber}
+                    error={formik.errors.brand}
                 />
 
-                <DateField
-                    label={`Start Date`}
-                    name={`startDate`}
-                    inputFormat={`dd/MM/yyyy`}
-                    value={formik.values.startDate}
-                    handleChange={formik.setFieldValue}
+                <TextField
+                    label={`Model`}
+                    name={`model`}
+                    placeholder={'Input Model'}
+                    value={formik.values.model}
+                    handleChange={formik.handleChange}
                     handleBlur={formik.handleBlur}
-                    error={formik.errors.startDate}
+                    error={formik.errors.model}
+                />
+
+                <TextField
+                    label={`Number`}
+                    name={`number`}
+                    placeholder={'Input Number'}
+                    value={formik.values.number}
+                    handleChange={formik.handleChange}
+                    handleBlur={formik.handleBlur}
+                    error={formik.errors.number}
                 />
 
                 <MoneyField
-                    label={`Total Sum`}
-                    name={`totalSum`}
+                    label={`Price`}
+                    name={`price`}
                     placeholder={'₽ 0.00'}
-                    value={formik.values.totalSum}
+                    value={formik.values.price}
                     handleChange={formik.handleChange}
                     handleBlur={formik.handleBlur}
-                    error={formik.errors.totalSum}
+                    error={formik.errors.price}
                 />
 
-                <ComboBoxField
-                    label={`Car`}
-                    name={`carId`}
-                    placeholder={`Choose Car`}
-                    value={formik.values.carId}
-                    options={SSCars}
+                <DateField
+                    label={`Date Of Purchase`}
+                    name={`dateOfPurchase`}
+                    inputFormat={`dd/MM/yyyy`}
+                    value={formik.values.dateOfPurchase}
                     handleChange={formik.setFieldValue}
                     handleBlur={formik.handleBlur}
-                    error={formik.errors.carId}
-                    onChangeEvent={(newValue) => {
-                        if (newValue.key) {
-                            getCarById(clientId, newValue.key).then(car => {
-                                setCurrentCar(car)
-                            })
-                        } else {
-                            setCurrentCar({
-                                brand: ``,
-                                model: ``,
-                                number: ``,
-                                price: ``,
-                            })
-                        }
-                    }}
+                    error={formik.errors.dateOfPurchase}
                 />
-
-                <FieldGroup label={`Car Values`}>
-                    <TextField
-                        width={20}
-                        label={`Brand`}
-                        name={`brand`}
-                        value={currentCar.brand}
-                    />
-
-                    <TextField
-                        width={20}
-                        label={`Model`}
-                        name={`model`}
-                        value={currentCar.model}
-                    />
-
-                    <TextField
-                        width={20}
-                        label={`Number`}
-                        name={`number`}
-                        value={currentCar.number}
-                    />
-
-                    <TextField
-                        width={20}
-                        label={`Price`}
-                        name={`price`}
-                        value={`₽ ${currentCar.price}`}
-                    />
-                </FieldGroup>
             </FormBody>
         </MainLayout>
     )
@@ -172,14 +116,10 @@ const CreateCar = ({SSCar, SSCar, SSCars}) => {
 
 export const getServerSideProps = async ({query}) => {
     const car = await getById(query.clientId, query.id)
-    const car = await getCarById(query.clientId, car.carId)
-    const cars = await getCarsAsOptions(query.clientId)
 
     return {
         props: {
             SSCar: car,
-            SSCar: car,
-            SSCars: cars,
         }
     }
 }

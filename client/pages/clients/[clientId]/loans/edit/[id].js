@@ -6,7 +6,7 @@ import {useState} from "react";
 import {FormBody} from "../../../../../components/FormComponents/FormBody"
 import {ComboBoxField, DateField, MoneyField, TextField} from "../../../../../components/FormComponents/Fields"
 import {getById, update} from "../../../../../api/loans/crud"
-import {getById as getCarById, getCarsAsOptions} from "../../../../../api/cars/crud"
+import {getById as getCarById, getUnusedCarsAsOptions} from "../../../../../api/cars/crud"
 import {useRouter} from "next/router";
 import LoansNavBar from "../_components/LoansNavBar";
 import FieldGroup from "../../../../../components/FormComponents/FieldGroup";
@@ -158,7 +158,7 @@ const CreateLoan = ({SSLoan, SSCar, SSCars}) => {
 export const getServerSideProps = async ({query}) => {
     const loan = await getById(query.clientId, query.id)
     const car = await getCarById(query.clientId, loan.carId)
-    const cars = await getCarsAsOptions(query.clientId, car.id)
+    const cars = await getUnusedCarsAsOptions(query.clientId, car.id)
 
     return {
         props: {

@@ -4,13 +4,9 @@ import {FormBody} from "../../../../../components/FormComponents/FormBody";
 import {TextField} from "../../../../../components/FormComponents/Fields/TextField";
 import {useRouter} from "next/router";
 import CarsNavBar from "../_components/CarsNavBar";
-import {DateField} from "../../../../../components/FormComponents/Fields/DateField";
-import {MoneyField} from "../../../../../components/FormComponents/Fields/MoneyField";
-import {ComboBoxField} from "../../../../../components/FormComponents/Fields/ComboBoxField";
-import {getById as getCarById} from "../../../../../api/cars/crud";
-import FieldGroup from "../../../../../components/FormComponents/FieldGroup";
+import {toIsoString} from "../../../../../util/DateUtil";
 
-const ViewCar = ({SSCar, SSCar}) => {
+const ViewCar = ({SSCar}) => {
     const router = useRouter()
     const clientId = router.query.clientId
     const carId = router.query.id
@@ -30,7 +26,7 @@ const ViewCar = ({SSCar, SSCar}) => {
                 })}
 
                 onEdit={() => router.push({
-                    pathname: `/clients/${clientId}/cars/edit/${clientId}`
+                    pathname: `/clients/${clientId}/cars/edit/${carId}`
                 })}
 
                 onSearch={() => router.push({
@@ -46,50 +42,34 @@ const ViewCar = ({SSCar, SSCar}) => {
                 }
             >
                 <TextField
-                    label={`Credit Number`}
-                    value={SSCar.creditNumber}
+                    width={20}
+                    label={`Brand`}
+                    value={SSCar.brand}
                 />
 
                 <TextField
-                    label={`Start Date`}
-                    value={SSCar.startDate}
+                    width={20}
+                    label={`Model`}
+                    value={SSCar.model}
                 />
 
                 <TextField
-                    label={`Total Sum`}
-                    value={SSCar.totalSum}
+                    width={20}
+                    label={`Number`}
+                    value={SSCar.number}
                 />
 
                 <TextField
-                    label={`Car`}
-                    value={`${SSCar.number} ${SSCar.brand} ${SSCar.model}`}
+                    width={20}
+                    label={`Price`}
+                    value={`₽ ${SSCar.price}`}
                 />
 
-                <FieldGroup label={`Car Values`}>
-                    <TextField
-                        width={20}
-                        label={`Brand`}
-                        value={SSCar.brand}
-                    />
-
-                    <TextField
-                        width={20}
-                        label={`Model`}
-                        value={SSCar.model}
-                    />
-
-                    <TextField
-                        width={20}
-                        label={`Number`}
-                        value={SSCar.number}
-                    />
-
-                    <TextField
-                        width={20}
-                        label={`Price`}
-                        value={`₽ ${SSCar.price}`}
-                    />
-                </FieldGroup>
+                <TextField
+                    width={20}
+                    label={`Date Of Purchase`}
+                    value={toIsoString(SSCar.dateOfPurchase)}
+                />
             </FormBody>
         </MainLayout>
     )
@@ -97,11 +77,9 @@ const ViewCar = ({SSCar, SSCar}) => {
 
 export const getServerSideProps = async ({query}) => {
     const car = await getById(query.clientId, query.id)
-    const car = await getCarById(query.clientId, car.carId)
 
     return {
         props: {
-            SSCar: car,
             SSCar: car,
         }
     }
