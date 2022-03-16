@@ -3,6 +3,7 @@ import axios from "axios";
 const getById = async (clientId, carId) => {
     return await axios.get(`http://localhost:8080/clients/${clientId}/cars/${carId}`).then(data => data.data)
 }
+
 const getCarsAsOptions = async (clientId) => {
     const cars = await axios.get(`http://localhost:8080/clients/${clientId}/cars`).then(data => data.data)
     const options = []

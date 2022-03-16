@@ -34,6 +34,11 @@ public class CarController {
         );
     }
 
+    @GetMapping("clients/{clientId}/cars/unused")
+    public List<Car> findUnused(@PathVariable Long clientId) {
+        return carDao.findUnused(clientId);
+    }
+
     @GetMapping("clients/{clientId}/cars")
     public List<Car> findAllByClientId(@PathVariable Long clientId) {
         return carDao.findByClientId(clientId)

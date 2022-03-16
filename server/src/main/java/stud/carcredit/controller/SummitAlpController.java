@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import stud.carcredit.dao.SummitAlpDao;
 import stud.carcredit.dao.SummitDao;
-import stud.carcredit.model.SummitAlp;
 import stud.carcredit.exceptions.NotFoundException;
+import stud.carcredit.model.SummitAlp;
 
 import javax.validation.Valid;
 import java.util.List;

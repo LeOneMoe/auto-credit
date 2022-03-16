@@ -1,15 +1,16 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import {MainLayout} from "../../../../components/MainLayout";
-import {useState} from "react";
+import {MainLayout} from "../../../../../components/MainLayout";
+import {useEffect, useState} from "react";
 
-import {FormBody} from "../../../../components/FormComponents/FormBody"
-import {ComboBoxField, DateField, MoneyField, TextField} from "../../../../components/FormComponents/Fields"
+import {FormBody} from "../../../../../components/FormComponents/FormBody"
+import {ComboBoxField, DateField, MoneyField, TextField} from "../../../../../components/FormComponents/Fields"
+import {getNationality} from "../../../../../api/clients/getNationality";
+import {getById, update} from "../../../../../api/cars/crud"
+import {getById as getCarById, getCarsAsOptions} from "../../../../../api/cars/crud"
 import {useRouter} from "next/router";
-import LoansNavBar from "./_components/LoansNavBar";
-import {create} from "../../../../api/loans/crud";
-import {getById as getCarById, getCarsAsOptions} from "../../../../api/cars/crud";
-import FieldGroup from "../../../../components/FormComponents/FieldGroup";
+import CarsNavBar from "../_components/CarsNavBar";
+import FieldGroup from "../../../../../components/FormComponents/FieldGroup";
 
 const formValidation = Yup.object().shape({
     creditNumber: Yup.string().nullable().trim().length(5, "Length of Credit Number must be 5 characters").required(`Credit Number is required`),
@@ -18,31 +19,42 @@ const formValidation = Yup.object().shape({
     carId: Yup.string().required(`Car is required`),
 })
 
-const CreateLoan = ({SSCars}) => {
+const CreateCar = ({SSCar, SSCar, SSCars}) => {
     const router = useRouter()
     const clientId = router.query.clientId
-    const loanId = router.query.id
+    const carId = router.query.id
 
-    const [currentCar, setCurrentCar] = useState({
-        brand: ``,
-        model: ``,
-        number: ``,
-        price: ``,
+    const [currentCar, setCurrentCar] = useState(SSCar)
+    const [options, setOptions] = useState([])
+
+    useEffect(() => {
+        async function loadOptions() {
+            const options = await getNationality()
+            setOptions(options)
+            console.log(options)
+        }
+
+        if (options.length === 0) {
+            loadOptions()
+        }
     })
 
     const formik = useFormik({
         initialValues: {
-            creditNumber: ``,
-            startDate: ``,
-            totalSum: ``,
-            carId: ``,
+            creditNumber: SSCar.creditNumber,
+            startDate: SSCar.startDate,
+            totalSum: SSCar.totalSum,
+            carId: SSCar.carId,
+            brand: SSCar.brand,
+            model: SSCar.model,
+            number: SSCar.number,
+            price: `₽ ${SSCar.price}`,
         },
         validationSchema: formValidation,
         onSubmit: () => {
-            console.log(formik.values)
-            create(clientId, formik.values).then(r => {
+            update(clientId, carId, formik.values).then(_ => {
                     router.push({
-                        pathname: `/clients/${clientId}/loans/view/${r.id}`,
+                        pathname: `/clients/${clientId}/cars/view/${carId}`,
                     })
                 }
             )
@@ -50,8 +62,8 @@ const CreateLoan = ({SSCars}) => {
     })
 
     return (
-        <MainLayout title={`Edit Loan`}>
-            <LoansNavBar id={clientId}/>
+        <MainLayout title={`Edit Car`}>
+            <CarsNavBar id={clientId}/>
 
             <FormBody
                 submitEnabled
@@ -59,11 +71,11 @@ const CreateLoan = ({SSCars}) => {
                 createEnabled
 
                 onSearch={() => router.push({
-                    pathname: `/clients/${clientId}/loans/search`
+                    pathname: `/clients/${clientId}/cars/search`
                 })}
 
                 onCreate={() => router.push({
-                    pathname: `/clients/${clientId}/loans/create`
+                    pathname: `/clients/${clientId}/cars/create`
                 })}
 
                 onSubmit={formik.handleSubmit}
@@ -159,14 +171,17 @@ const CreateLoan = ({SSCars}) => {
 }
 
 export const getServerSideProps = async ({query}) => {
+    const car = await getById(query.clientId, query.id)
+    const car = await getCarById(query.clientId, car.carId)
     const cars = await getCarsAsOptions(query.clientId)
 
     return {
         props: {
+            SSCar: car,
+            SSCar: car,
             SSCars: cars,
         }
     }
 }
 
-
-export default CreateLoan
+export default CreateCar

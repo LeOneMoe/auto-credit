@@ -15,13 +15,16 @@ const getAll = async (clientId, params) => {
 }
 
 const create = async (clientId, params) => {
+    console.log(params)
+    console.log(`sdddd`)
+    console.log(params)
+    console.log(`sdddd`)
+    console.log(params)
+
     return await axios.post(`http://localhost:8080/clients/${clientId}/loans/`, params).then(data => data.data)
 }
 
 const update = async (clientId, loanId, params) => {
-    console.log(`http://localhost:8080/clients/${clientId}/loans/${loanId}`)
-    console.log(params)
-
     return await axios.put(`http://localhost:8080/clients/${clientId}/loans/${loanId}`, params)
 }
 

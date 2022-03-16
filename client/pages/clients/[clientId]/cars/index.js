@@ -1,4 +1,4 @@
-import {deleteById, getAll} from "../../../../api/loans/crud";
+import {deleteById, getAll} from "../../../../api/cars/crud";
 import {getNationality} from "../../../../api/clients/getNationality";
 import TableHead from "../../../../components/TableComponents/TableHead";
 import TableColumnHeader from "../../../../components/TableComponents/TableColumnHeader";
@@ -9,51 +9,54 @@ import Table from "../../../../components/TableComponents/Table";
 import {MainLayout} from "../../../../components/MainLayout";
 import {toIsoString} from "../../../../util/DateUtil";
 import {useRouter} from "next/router";
-import {getOptionLabel} from "../../../../util/Options";
-import LoansNavBar from "./_components/LoansNavBar";
+import CarsNavBar from "./_components/CarsNavBar";
 import Toolbar from "../../../../components/FormComponents/Toolbar";
 
-const ListLoans = ({SSLoans, options}) => {
+const ListCars = ({SSCars, options}) => {
     const router = useRouter();
 
     const clientId = router.query.clientId
 
     return (
-        <MainLayout title={`Loans`}>
-            <LoansNavBar childPanelsEnabled={false} id={clientId}/>
+        <MainLayout title={`Cars`}>
+            <CarsNavBar childPanelsEnabled={false} id={clientId}/>
 
             <Toolbar
                 searchEnabled
                 createEnabled
-                onSearch={() => router.push(`/clients/${clientId}/loans/search`)}
-                onCreate={() => router.push(`/clients/${clientId}/loans/create`)}
+                onSearch={() => router.push(`/clients/search`)}
+                onCreate={() => router.push(`/clients/create`)}
             />
 
             <Table>
                 <TableHead>
-                    <TableColumnHeader>Credit Number</TableColumnHeader>
-                    <TableColumnHeader>Start Date</TableColumnHeader>
-                    <TableColumnHeader>Total Sum</TableColumnHeader>
+                    <TableColumnHeader>Brand</TableColumnHeader>
+                    <TableColumnHeader>Model</TableColumnHeader>
+                    <TableColumnHeader>Number</TableColumnHeader>
+                    <TableColumnHeader>Date of Purchase</TableColumnHeader>
+                    <TableColumnHeader>Price</TableColumnHeader>
                 </TableHead>
 
                 <TableBody>
-                    {SSLoans.map(loan =>
+                    {SSCars.map(car =>
                         <TableRow
-                            key={loan.id}
-                            href={`/clients/[clientId]/loans/view/[loanId]`}
-                            as={`/clients/${clientId}/loans/view/${loan.id}`}
+                            key={car.id}
+                            href={`/clients/[clientId]/cars/view/[carId]`}
+                            as={`/clients/${clientId}/cars/view/${car.id}`}
                             onEdit={() =>
                                 router.push({
-                                    pathname: `/clients/${clientId}/loans/edit/${loan.id}`
+                                    pathname: `/clients/${clientId}/cars/edit/${car.id}`
                                 })
                             }
                             onDelete={() => {
-                                deleteById(loan.id).then(_ => router.reload())
+                                deleteById(car.id).then(_ => router.reload())
                             }}
                         >
-                            <TableCell>{loan.creditNumber}</TableCell>
-                            <TableCell>{toIsoString(loan.startDate)}</TableCell>
-                            <TableCell>₽ {loan.totalSum}</TableCell>
+                            <TableCell>{car.brand}</TableCell>
+                            <TableCell>{car.model}</TableCell>
+                            <TableCell>{car.number}</TableCell>
+                            <TableCell>{toIsoString(car.dateOfPurchase)}</TableCell>
+                            <TableCell>₽ {car.price}</TableCell>
                         </TableRow>
                     )}
                 </TableBody>
@@ -63,16 +66,16 @@ const ListLoans = ({SSLoans, options}) => {
 }
 
 export const getServerSideProps = async ({query}) => {
-    const loans = await getAll(query.clientId, query)
+    const cars = await getAll(query.clientId, query)
 
     const options = await getNationality()
 
     return {
         props: {
-            SSLoans: loans,
+            SSCars: cars,
             options: options
         }
     }
 }
 
-export default ListLoans
+export default ListCars

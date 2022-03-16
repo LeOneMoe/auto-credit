@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import stud.carcredit.dao.CarDao;
+import stud.carcredit.dao.ClientDao;
 import stud.carcredit.dao.LoanDao;
 import stud.carcredit.exceptions.NotFoundException;
+import stud.carcredit.model.Client;
 import stud.carcredit.model.Loan;
 
 import javax.validation.Valid;
@@ -18,17 +20,17 @@ import java.util.Optional;
 public class LoanController {
     private final LoanDao loanDao;
     private final CarDao carDao;
+    private final ClientDao clientDao;
 
     @Autowired
-    public LoanController(LoanDao loanDao, CarDao carDao) {
+    public LoanController(LoanDao loanDao, CarDao carDao, ClientDao clientDao) {
         this.loanDao = loanDao;
         this.carDao = carDao;
+        this.clientDao = clientDao;
     }
 
     @GetMapping("clients/{clientId}/loans")
     public List<Loan> getAll(@PathVariable("clientId") Long clientId) {
-
-
         return loanDao.findByClientId(clientId);
     }
 
@@ -39,8 +41,17 @@ public class LoanController {
                 .orElseThrow(() -> new NotFoundException("LoanId: " + id + " not found")));
     }
 
-    @PostMapping
-    public Loan create(@Valid @RequestBody Loan loan) {
+    @PostMapping("clients/{clientId}/loans/")
+    public Loan create(
+            @Valid @RequestBody Loan loan,
+            @PathVariable("clientId") Long clientId
+    ) {
+        System.out.println(loan.toString());
+
+        loan.setClientId(clientId);
+        loan.setClient(clientDao.findById(clientId).get());
+        loan.setCar(carDao.findById(loan.getCarId()).get());
+
         return loanDao.save(loan);
     }
 

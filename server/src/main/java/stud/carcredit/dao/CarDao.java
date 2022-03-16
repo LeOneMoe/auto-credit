@@ -18,5 +18,12 @@ public interface CarDao extends JpaRepository<Car, Long> {
     )
     List<Car> find(@Param("brand") String brand, @Param("model") String model, @Param("number") String number);
 
+    @Query(
+            "select c from Car c " +
+                    "left join Loan l on c.id = l.carId " +
+                    "where l.carId is null and c.clientId = :clientId"
+    )
+    List<Car> findUnused(@Param("clientId") Long clientId);
+
     Optional<List<Car>> findByClientId(Long clientId);
 }

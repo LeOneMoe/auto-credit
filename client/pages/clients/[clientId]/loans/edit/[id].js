@@ -1,11 +1,10 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {MainLayout} from "../../../../../components/MainLayout";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
 import {FormBody} from "../../../../../components/FormComponents/FormBody"
 import {ComboBoxField, DateField, MoneyField, TextField} from "../../../../../components/FormComponents/Fields"
-import {getNationality} from "../../../../../api/clients/getNationality";
 import {getById, update} from "../../../../../api/loans/crud"
 import {getById as getCarById, getCarsAsOptions} from "../../../../../api/cars/crud"
 import {useRouter} from "next/router";
@@ -25,19 +24,6 @@ const CreateLoan = ({SSLoan, SSCar, SSCars}) => {
     const loanId = router.query.id
 
     const [currentCar, setCurrentCar] = useState(SSCar)
-    const [options, setOptions] = useState([])
-
-    useEffect(() => {
-        async function loadOptions() {
-            const options = await getNationality()
-            setOptions(options)
-            console.log(options)
-        }
-
-        if (options.length === 0) {
-            loadOptions()
-        }
-    })
 
     const formik = useFormik({
         initialValues: {
@@ -45,10 +31,7 @@ const CreateLoan = ({SSLoan, SSCar, SSCars}) => {
             startDate: SSLoan.startDate,
             totalSum: SSLoan.totalSum,
             carId: SSLoan.carId,
-            brand: SSCar.brand,
-            model: SSCar.model,
-            number: SSCar.number,
-            price: `₽ ${SSCar.price}`,
+
         },
         validationSchema: formValidation,
         onSubmit: () => {
@@ -63,7 +46,7 @@ const CreateLoan = ({SSLoan, SSCar, SSCars}) => {
 
     return (
         <MainLayout title={`Edit Loan`}>
-            <LoansNavBar id={loanId}/>
+            <LoansNavBar id={clientId}/>
 
             <FormBody
                 submitEnabled
@@ -82,7 +65,6 @@ const CreateLoan = ({SSLoan, SSCar, SSCars}) => {
 
             >
                 <TextField
-                    width={20}
                     label={`Credit Number`}
                     name={`creditNumber`}
                     placeholder={'Input Name'}
@@ -147,23 +129,23 @@ const CreateLoan = ({SSLoan, SSCar, SSCars}) => {
 
                     <TextField
                         width={20}
-                        label={`Credit Number`}
-                        name={`creditNumber`}
+                        label={`Model`}
+                        name={`model`}
                         value={currentCar.model}
                     />
 
                     <TextField
                         width={20}
-                        label={`Credit Number`}
-                        name={`creditNumber`}
+                        label={`Number`}
+                        name={`number`}
                         value={currentCar.number}
                     />
 
                     <TextField
                         width={20}
-                        label={`Credit Number`}
-                        name={`creditNumber`}
-                        value={currentCar.price}
+                        label={`Price`}
+                        name={`price`}
+                        value={`₽ ${currentCar.price}`}
                     />
                 </FieldGroup>
             </FormBody>

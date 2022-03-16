@@ -22,18 +22,21 @@ public class Loan extends AuditModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "client_id", nullable = false) // name of the foreign key column
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Client client;
+
+    @Column(name = "client_id", updatable = false, insertable = false)
+    private Long clientId;
+
     @Column(name = "credit_number")
     private String creditNumber;
 
     @Column(name = "start_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "client_id", nullable = false) // name of the foreign key column
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Client client;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id", referencedColumnName = "id")

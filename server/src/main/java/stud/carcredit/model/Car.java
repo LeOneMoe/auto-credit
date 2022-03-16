@@ -28,6 +28,9 @@ public class Car extends AuditModel {
     @JsonIgnore
     private Client client;
 
+    @Column(name = "client_id", updatable = false, insertable = false)
+    private Long clientId;
+
     @OneToOne(mappedBy = "car")
     @JsonIgnore
     private Loan loan;
