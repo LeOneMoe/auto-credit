@@ -1,13 +1,13 @@
 package stud.carcredit.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import stud.carcredit.dao.CarDao;
-import stud.carcredit.dao.ClientDao;
-import stud.carcredit.dao.LoanDao;
 import stud.carcredit.exceptions.NotFoundException;
 import stud.carcredit.model.Loan;
+import stud.carcredit.repository.CarRepo;
+import stud.carcredit.repository.ClientRepo;
+import stud.carcredit.repository.LoanRepo;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -16,24 +16,18 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequiredArgsConstructor
 public class LoanController {
-    private final LoanDao loanDao;
-    private final CarDao carDao;
-    private final ClientDao clientDao;
-
-    @Autowired
-    public LoanController(LoanDao loanDao, CarDao carDao, ClientDao clientDao) {
-        this.loanDao = loanDao;
-        this.carDao = carDao;
-        this.clientDao = clientDao;
-    }
+    private final LoanRepo loanRepo;
+    private final CarRepo carRepo;
+    private final ClientRepo clientRepo;
 
     @GetMapping("clients/{clientId}/loans")
     public List<Loan> find(
             Loan loan,
             @PathVariable("clientId") Long clientId
     ) {
-        return loanDao.find(
+        return loanRepo.find(
                 loan.getCreditNumber(),
                 loan.getCarId(),
                 clientId
@@ -42,7 +36,7 @@ public class LoanController {
 
     @GetMapping("clients/{clientId}/loans/{loanId}")
     public Optional<Loan> getById(@PathVariable("loanId") Long id) {
-        return Optional.ofNullable(loanDao.findById(id)
+        return Optional.ofNullable(loanRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException("LoanId: " + id + " not found")));
     }
 
@@ -54,10 +48,10 @@ public class LoanController {
         System.out.println(loan.toString());
 
         loan.setClientId(clientId);
-        loan.setClient(clientDao.findById(clientId).get());
-        loan.setCar(carDao.findById(loan.getCarId()).get());
+        loan.setClient(clientRepo.findById(clientId).get());
+        loan.setCar(carRepo.findById(loan.getCarId()).get());
 
-        return loanDao.save(loan);
+        return loanRepo.save(loan);
     }
 
     @PutMapping("clients/{clientId}/loans/{loanId}")
@@ -66,14 +60,14 @@ public class LoanController {
             @RequestBody Loan loanRequest
     ) {
 
-        return loanDao.findById(loanId).map(loan -> {
+        return loanRepo.findById(loanId).map(loan -> {
             loan.setCreditNumber(loanRequest.getCreditNumber());
             loan.setStartDate(loanRequest.getStartDate());
             loan.setTotalSum(loanRequest.getTotalSum());
-            loan.setCar(carDao.findById(loanRequest.getCarId()).get());
+            loan.setCar(carRepo.findById(loanRequest.getCarId()).get());
             loan.setCarId(loanRequest.getCarId());
 
-            return loanDao.save(loan);
+            return loanRepo.save(loan);
         }).orElseThrow(() -> new NotFoundException("LoanId: " + loanId + " not found"));
     }
 
@@ -81,8 +75,8 @@ public class LoanController {
     public ResponseEntity<?> delete(@PathVariable("loanId") Long id) {
         System.out.println(id);
 
-        return loanDao.findById(id).map(loan -> {
-            loanDao.delete(loan);
+        return loanRepo.findById(id).map(loan -> {
+            loanRepo.delete(loan);
             return ResponseEntity.ok().build();
         }).orElseThrow(() -> new NotFoundException("LoanId: " + id + " not found"));
     }

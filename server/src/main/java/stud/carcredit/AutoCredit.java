@@ -47,4 +47,15 @@ public class AutoCredit {
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(urlBasedCorsConfigurationSource);
     }
+
+//    @Bean
+//    CommandLineRunner run(AppUserService service) {
+//        return args -> {
+//            service.saveRole(new Role(null, "ROLE_ADMIN"));
+//
+//            service.saveAppUser(new AppUser(null, "admin", "admin", "admin", new ArrayList<>()));
+//
+//            service.addRoleToAppUser("admin", "ROLE_ADMIN");
+//        };
+//    }
 }

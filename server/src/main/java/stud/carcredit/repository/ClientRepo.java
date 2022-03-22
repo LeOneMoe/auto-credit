@@ -1,4 +1,4 @@
-package stud.carcredit.dao;
+package stud.carcredit.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -7,7 +7,7 @@ import stud.carcredit.model.Client;
 
 import java.util.List;
 
-public interface ClientDao extends JpaRepository<Client, Long> {
+public interface ClientRepo extends JpaRepository<Client, Long> {
     @Query(
             "select c from Client c " +
                     "where (:name is null or c.name like concat('%', :name, '%')) " +

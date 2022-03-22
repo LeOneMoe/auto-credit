@@ -1,29 +1,28 @@
 package stud.carcredit.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import stud.carcredit.dao.NationalityDao;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import stud.carcredit.model.Nationality;
+import stud.carcredit.repository.NationalityRepo;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("options")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequiredArgsConstructor
 public class OptionController {
-    private final NationalityDao nationalityDao;
-
-    @Autowired
-    public OptionController(NationalityDao nationalityDao) {
-        this.nationalityDao = nationalityDao;
-    }
+    private final NationalityRepo nationalityRepo;
 
     @GetMapping("nationality")
     public List<Nationality> getNationalityOptions(String key) {
         if (key != null) {
-            return nationalityDao.findAllByKey(key);
+            return nationalityRepo.findAllByKey(key);
         }
 
-        return nationalityDao.findAll();
+        return nationalityRepo.findAll();
     }
 }
