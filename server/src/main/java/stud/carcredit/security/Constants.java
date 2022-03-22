@@ -1,5 +1,5 @@
 package stud.carcredit.security;
 
 public class Constants {
-    public final static String TOKEN_PREFIX = "AutoCredit ";
+    public final static String TOKEN_PREFIX = "Bearer ";
 }

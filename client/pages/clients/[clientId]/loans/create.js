@@ -38,7 +38,6 @@ const CreateLoan = ({SSCars}) => {
         },
         validationSchema: formValidation,
         onSubmit: () => {
-            console.log(formik.values)
             create(clientId, formik.values).then(r => {
                     router.push({
                         pathname: `/clients/${clientId}/loans/view/${r.id}`,

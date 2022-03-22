@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
@@ -37,6 +38,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+
         log.info("Username: {}; Password: {}", username, password);
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
@@ -52,21 +54,17 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
-                .withIssuer(request.getRequestURI().toString())
+                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000)) // 30 minutes
+                .withIssuer(request.getRequestURI())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
         String refreshToken = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 120 * 60 * 1000))
-                .withIssuer(request.getRequestURI().toString())
+                .withExpiresAt(new Date(System.currentTimeMillis() + 120 * 60 * 1000)) // 2 hours
+                .withIssuer(request.getRequestURI())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
-
-
-//        response.setHeader("access_token", accessToken);
-//        response.setHeader("refresh_token", refreshToken);
 
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", accessToken);
@@ -77,5 +75,18 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }
 
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        String username = request.getParameter("username");
+        log.info("Failed to authenticate User: {}", username);
 
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "failed to authenticate user: " + username);
+        error.put("message", "invalid username and password combination");
+
+        response.setContentType(APPLICATION_JSON_VALUE);
+        response.setStatus(SC_FORBIDDEN);
+
+        new ObjectMapper().writeValue(response.getOutputStream(), error);
+    }
 }

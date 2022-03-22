@@ -23,8 +23,6 @@ const CreateLoan = ({SSLoan, SSCar, SSCars}) => {
     const clientId = router.query.clientId
     const loanId = router.query.id
 
-    console.log(SSCars)
-
     const [currentCar, setCurrentCar] = useState(SSCar)
 
     const formik = useFormik({
