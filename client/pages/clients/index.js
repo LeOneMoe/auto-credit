@@ -62,10 +62,10 @@ const ListClients = ({SSClients, options}) => {
     )
 }
 
-export const getServerSideProps = async ({query}) => {
-    const clients = await getAll(query)
+export const getServerSideProps = async ({query, req}) => {
+    const clients = await getAll(query, req)
 
-    const options = await getNationality()
+    const options = await getNationality(req)
 
     return {
         props: {
