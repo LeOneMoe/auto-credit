@@ -9,7 +9,6 @@ const formValidation = Yup.object().shape({
     password: Yup.string().required(`Passport is required`),
 })
 
-
 const SignIn = ({}) => {
     const router = useRouter();
     const [error, setError] = useState(null);
@@ -22,13 +21,13 @@ const SignIn = ({}) => {
         validationSchema: formValidation,
         onSubmit: (values, {setSubmitting}) => {
             const res = signIn('credentials', {
-                redirect: false,
+                redirect: `/`,
                 username: values.username,
                 password: values.password,
                 callbackUrl: `${window.location.origin}`,
             })
 
-            if (res?.error) {
+            if (res.error) {
                 setError(res.error)
             } else {
                 setError(null)
@@ -41,11 +40,10 @@ const SignIn = ({}) => {
         }
     })
 
-
     return (
         <div>
             Welcome
-            <form onClick={formik.handleSubmit}>
+            <form onSubmit={formik.handleSubmit}>
                 {error}
 
                 <label> Username
@@ -69,27 +67,5 @@ const SignIn = ({}) => {
         </div>
     )
 }
-
-// export const getServerSideProps = async (context) => {
-//     const {req, res} = context
-//     const session = await getSession({req})
-//
-//     if (session && res && session.accessToken) {
-//         res.writeHead(
-//             302,
-//             {Location: `/`}
-//         )
-//         res.end()
-//
-//         return;
-//     }
-//
-//     return {
-//         props: {
-//             session: null,
-//             providers: await getProviders()
-//         }
-//     }
-// }
 
 export default SignIn

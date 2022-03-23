@@ -1,6 +1,5 @@
 import {MainLayout} from "../components/MainLayout";
 
-
 const Index = () => {
     return (
         <MainLayout title={`Home`}>

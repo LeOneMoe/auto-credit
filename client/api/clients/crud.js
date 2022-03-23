@@ -5,7 +5,7 @@ const getById = async (id) => {
     return await axios.get(`${SERVER_PATH}/clients/${id}`).then(data => data.data)
 }
 
-const getAll = async (params, req) => {
+const getAll = async (params) => {
     for (const key of Object.keys(params)) {
         if (params[key] === ``) {
             delete params[key];
@@ -14,7 +14,9 @@ const getAll = async (params, req) => {
 
     return await axios.get(`${SERVER_PATH}/clients`, {
         params,
-        headers: {Authorization: "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiaXNzIjoiL2xvZ2luIiwiZXhwIjoxNjQ4MDM4OTE4fQ.HaiJycgp4MY61hni3LMoGyCwVaAo8kJlncYm6c6IRZ4"}
+        // headers: {
+        //     "Authorization": `Bearer ${token}`
+        // }
     }).then(data => data.data)
 }
 

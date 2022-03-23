@@ -18,7 +18,7 @@ export default function Navigation({title = `test`}) {
                 {!session ?
                     <button className={classes.link} onClick={() => signIn()}>Sing in</button>
                     :
-                    <button className={classes.link} onClick={() => signOut()}>Sing out</button>
+                    <button className={classes.link} onClick={() => signOut({callbackUrl: `/signin`})}>Sing out</button>
                 }
             </nav>
         </div>

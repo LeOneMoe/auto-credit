@@ -81,20 +81,23 @@ public class AppUserController {
 
                 String accessToken = JWT.create()
                         .withSubject(appUser.getUsername())
+                        .withIssuedAt(new Date(System.currentTimeMillis()))
                         .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
                         .withIssuer(request.getRequestURI().toString())
+                        .withClaim("user", appUser.getUsername())
                         .withClaim("roles", appUser.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                         .sign(algorithm);
 
 
                 Map<String, String> tokens = new HashMap<>();
-                tokens.put("access_token", accessToken);
-                tokens.put("refresh_token", refreshToken);
+                tokens.put("accessToken", accessToken);
+                tokens.put("refreshToken", refreshToken);
 
                 response.setContentType(APPLICATION_JSON_VALUE);
 
                 new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
+                log.info("Successful token refresh for User: {}", appUser.getUsername());
             } catch (Exception e) {
                 log.error("Error logging in: {}", e.getMessage());
 
