@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,17 +19,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static stud.carcredit.security.Constants.TOKEN_PREFIX;
+import static stud.carcredit.security.utils.HeaderWriter.writeSuccessfulAuthHeaders;
+import static stud.carcredit.security.utils.HeaderWriter.writeUnsuccessfulAuthHeaders;
 
 @RestController
 @RequestMapping("/auth")
@@ -81,7 +77,6 @@ public class AppUserController {
                 AppUser appUser = appUserService.getAppUser(username);
 
                 Date expiresIn = new Date(System.currentTimeMillis() + 30 * 60 * 1000); // 30 minutes
-//                Date expiresIn = new Date(System.currentTimeMillis() + 30 * 1000); // 30 secs
 
                 String accessToken = JWT.create()
                         .withSubject(appUser.getUsername())
@@ -92,30 +87,13 @@ public class AppUserController {
                         .withClaim("roles", appUser.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                         .sign(algorithm);
 
-                SimpleDateFormat formatter = new SimpleDateFormat("EE MMM d y H:m:s ZZZ");
-                String expiresInString = formatter.format(expiresIn);
-
-                Map<String, String> tokens = new HashMap<>();
-                tokens.put("accessToken", accessToken);
-                tokens.put("expiresIn", String.valueOf(expiresIn.getTime()));
-                tokens.put("refreshToken", refreshToken);
-
-                response.setContentType(APPLICATION_JSON_VALUE);
-
-                new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+                writeSuccessfulAuthHeaders(response, expiresIn, accessToken, refreshToken, appUser.getUsername());
 
                 log.info("Successful token refresh for User: {}", appUser.getUsername());
             } catch (Exception e) {
                 log.error("Error logging in: {}", e.getMessage());
 
-                response.setHeader("error", e.getMessage());
-                response.setStatus(FORBIDDEN.value());
-
-                Map<String, String> error = new HashMap<>();
-                error.put("error_message", e.getMessage());
-                response.setContentType(APPLICATION_JSON_VALUE);
-
-                new ObjectMapper().writeValue(response.getOutputStream(), error);
+                writeUnsuccessfulAuthHeaders(response, e);
             }
         } else {
             throw new RuntimeException("Refresh token is missing");

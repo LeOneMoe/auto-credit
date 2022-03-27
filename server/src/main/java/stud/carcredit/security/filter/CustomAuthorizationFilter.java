@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,14 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static stud.carcredit.security.Constants.TOKEN_PREFIX;
+import static stud.carcredit.security.utils.HeaderWriter.writeUnsuccessfulAuthHeaders;
 
 @Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
@@ -51,9 +47,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-                    stream(roles).forEach(role -> {
-                        authorities.add(new SimpleGrantedAuthority(role));
-                    });
+                    stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
 
                     UsernamePasswordAuthenticationToken authenticationToken =
                             new UsernamePasswordAuthenticationToken(username, null, authorities);
@@ -64,14 +58,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 } catch (Exception e) {
                     log.error("Error logging in: {}, token: {}", e.getMessage(), authorizationHeader);
 
-                    response.setHeader("error", e.getMessage());
-                    response.setStatus(FORBIDDEN.value());
-
-                    Map<String, String> error = new HashMap<>();
-                    error.put("error_message", e.getMessage());
-                    response.setContentType(APPLICATION_JSON_VALUE);
-
-                    new ObjectMapper().writeValue(response.getOutputStream(), error);
+                    writeUnsuccessfulAuthHeaders(response, e);
                 }
             } else {
                 filterChain.doFilter(request, response);

@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static stud.carcredit.security.utils.HeaderWriter.writeSuccessfulAuthHeaders;
 
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -52,7 +53,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Algorithm algorithm = AlgorithmConstructor.getAlgorithm();
 
         Date expiresIn = new Date(System.currentTimeMillis() + 30 * 60 * 1000); // 30 minutes
-//        Date expiresIn = new Date(System.currentTimeMillis() + 30 * 1000); // 30 secs
 
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
@@ -72,18 +72,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
-//        SimpleDateFormat formatter = new SimpleDateFormat("EE MMM d y H:m:s ZZZ");
-//        String expiresInString = formatter.format(expiresIn);
 
-        Map<String, String> authRes = new HashMap<>();
-        authRes.put("accessToken", accessToken);
-        authRes.put("expiresIn", String.valueOf(expiresIn.getTime()));
-        authRes.put("refreshToken", refreshToken);
-        authRes.put("name", user.getUsername());
-
-        response.setContentType(APPLICATION_JSON_VALUE);
-
-        new ObjectMapper().writeValue(response.getOutputStream(), authRes);
+        writeSuccessfulAuthHeaders(response, expiresIn, accessToken, refreshToken, user.getUsername());
     }
 
     @Override
