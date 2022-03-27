@@ -22,7 +22,7 @@
 }
 
 .label {
-    width: 15rem;
+    /*width: 15rem;*/
     word-break: break-word;
     align-items: center;
 }

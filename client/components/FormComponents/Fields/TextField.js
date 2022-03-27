@@ -11,11 +11,14 @@ const TextField = ({
                        width = 20,
                        disabled = false,
                        type = `text`,
-                       autoComplete = null
+                       autoComplete = null,
+                       labelWidth = `15rem`
                    }) => {
     return (
         <div className={classes.field}>
-            <div className={classes.label}>{label}</div>
+            {label &&
+                <div className={classes.label} style={{width: labelWidth}}>{label}</div>
+            }
 
             <div className={classes.fieldWrapper} style={{width: width + `rem`}}>
                 <input

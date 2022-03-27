@@ -18,8 +18,8 @@ const SignIn = ({}) => {
 
     const formik = useFormik({
         initialValues: {
-            username: `admin`,
-            password: `admian`,
+            username: ``,
+            password: ``,
         },
         validationSchema: formValidation,
         onSubmit: async (values, {setSubmitting}) => {
@@ -61,21 +61,21 @@ const SignIn = ({}) => {
                     </div>
 
                     <TextField
-                        width={10}
+                        width={20}
                         type={`text`}
                         name={`username`}
-                        label={`Username`}
+                        placeholder={`username`}
                         autoComplete={`username`}
                         value={formik.values.username}
                         handleChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                     />
                     <TextField
-                        width={10}
+                        width={20}
                         type={`password`}
                         name={`password`}
+                        placeholder={`password`}
                         autoComplete={`current-password`}
-                        label={`Password`}
                         value={formik.values.password}
                         handleChange={formik.handleChange}
                         onBlur={formik.handleBlur}
