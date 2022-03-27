@@ -1,6 +1,18 @@
 import classes from "../Form.module.css"
 
-const TextField = ({label, name, placeholder, value, handleChange, handleBlur, error, width = 20, disabled=false}) => {
+const TextField = ({
+                       label,
+                       name,
+                       placeholder,
+                       value,
+                       handleChange,
+                       handleBlur,
+                       error,
+                       width = 20,
+                       disabled = false,
+                       type = `text`,
+                       autoComplete = null
+                   }) => {
     return (
         <div className={classes.field}>
             <div className={classes.label}>{label}</div>
@@ -8,7 +20,8 @@ const TextField = ({label, name, placeholder, value, handleChange, handleBlur, e
             <div className={classes.fieldWrapper} style={{width: width + `rem`}}>
                 <input
                     className={classes.input}
-                    type="text"
+                    type={type}
+                    autoComplete={autoComplete}
                     name={name}
                     placeholder={disabled ? `` : placeholder}
                     value={value}

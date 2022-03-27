@@ -1,23 +1,24 @@
 import {useRouter} from 'next/router';
-import {getSession} from "next-auth/react";
-
-export {RouteGuard};
+import {getSession, signIn} from "next-auth/react";
+import {useEffect} from "react";
 
 function RouteGuard({children}) {
     const router = useRouter();
-    getSession().then(session => {
-        if (!session) {
-            if (router.pathname !== `/signin`) {
-                console.log(session)
-                console.log(router.pathname)
 
-                router.push({
-                    pathname: `/signin`
-                })
+    useEffect(() => {
+        getSession().then(session => {
+            if (!session) {
+                if (router.pathname !== `/signin` && router.pathname !== `/autherror`) {
+                    signIn()
+                }
 
+            } else if (session.error === `RefreshAccessTokenError`) {
+                signIn()
             }
-        }
+        })
     })
 
     return (children);
 }
+
+export {RouteGuard};

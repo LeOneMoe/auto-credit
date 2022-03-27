@@ -1,7 +1,33 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
-import {SERVER_PATH} from "../../../api/Constants"
+
+async function refreshAccessToken(token) {
+    try {
+        const response = await axios.get(`${process.env.SERVER_PATH}/auth/token/refresh`, {
+            headers: {
+                "Authorization": `Bearer ${token.refreshToken}`
+            }
+        }).catch((error) => {
+            throw error
+        })
+
+        const refreshedTokens = response.data
+
+        return {
+            accessToken: refreshedTokens.accessToken,
+            refreshToken: refreshedTokens.refreshToken,
+            expiresIn: refreshedTokens.expiresIn,
+            error: null
+        }
+    } catch (error) {
+        return {
+            ...token,
+            error: "RefreshAccessTokenError",
+        }
+    }
+}
+
 
 const options = {
     providers: [
@@ -13,11 +39,12 @@ const options = {
                 password: {label: `Password`, type: `password`}
             },
             async authorize(credentials) {
-                const params = new URLSearchParams()
-                params.append(`username`, credentials.username)
-                params.append(`password`, credentials.password)
+                const params = new URLSearchParams({
+                    username: credentials.username,
+                    password: credentials.password,
+                })
 
-                const response = await axios.post(`${SERVER_PATH}/login`, params)
+                const response = await axios.post(`${process.env.SERVER_PATH}/login`, params)
 
                 if (response) {
                     return response.data;
@@ -27,10 +54,11 @@ const options = {
             }
         }),
     ],
+    secret: `secret`,
     pages: {
         signIn: '/signin',
         // signOut: '/auth/signout',
-        // error: '/auth/error',
+        // error: '/autherror',
         // verifyRequest: '/auth/verify-request',
         // newUser: '/auth/new-user'
     },
@@ -43,12 +71,20 @@ const options = {
             if (account) {
                 token.accessToken = user.accessToken
                 token.refreshToken = user.refreshToken
+                token.expiresIn = user.expiresIn
             }
 
-            return token;
+            if (Date.now() >= token.expiresIn - 60 * 10) { // refresh token if it`s lifetime is less than 10min
+                return refreshAccessToken(token);
+            }
+
+            return token
         },
         async session({session, token}) {
+            session.user = token.user
             session.accessToken = token.accessToken
+            session.expires = token.expiresIn
+            session.error = token.error
 
             axios.defaults.headers.common['Authorization'] = `Bearer ${session.accessToken}`
 

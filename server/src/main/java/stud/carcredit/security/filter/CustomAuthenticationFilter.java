@@ -14,7 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import stud.carcredit.security.utils.AlgorithmConstructor;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -47,15 +46,18 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
         User user = (User) authentication.getPrincipal();
 
         Algorithm algorithm = AlgorithmConstructor.getAlgorithm();
 
+        Date expiresIn = new Date(System.currentTimeMillis() + 30 * 60 * 1000); // 30 minutes
+//        Date expiresIn = new Date(System.currentTimeMillis() + 30 * 1000); // 30 secs
+
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
                 .withIssuedAt(new Date(System.currentTimeMillis()))
-                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000)) // 30 minutes
+                .withExpiresAt(expiresIn)
                 .withIssuer(request.getRequestURI())
                 .withClaim("user", user.getUsername())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
@@ -70,8 +72,12 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
+//        SimpleDateFormat formatter = new SimpleDateFormat("EE MMM d y H:m:s ZZZ");
+//        String expiresInString = formatter.format(expiresIn);
+
         Map<String, String> authRes = new HashMap<>();
         authRes.put("accessToken", accessToken);
+        authRes.put("expiresIn", String.valueOf(expiresIn.getTime()));
         authRes.put("refreshToken", refreshToken);
         authRes.put("name", user.getUsername());
 
@@ -81,7 +87,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         String username = request.getParameter("username");
         log.info("Failed to authenticate User: {}", username);
 

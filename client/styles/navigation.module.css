@@ -37,6 +37,21 @@
     align-items: center;
 }
 
+.authButton {
+    color: white;
+
+    width: min(8rem, 50%);
+    text-align: center;
+    padding: 1rem 2rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border: none;
+}
+
+
 @media screen and (max-width: 800px) {
     .header {
         flex-direction: column;

@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -79,18 +80,24 @@ public class AppUserController {
                 String username = decodedJWT.getSubject();
                 AppUser appUser = appUserService.getAppUser(username);
 
+                Date expiresIn = new Date(System.currentTimeMillis() + 30 * 60 * 1000); // 30 minutes
+//                Date expiresIn = new Date(System.currentTimeMillis() + 30 * 1000); // 30 secs
+
                 String accessToken = JWT.create()
                         .withSubject(appUser.getUsername())
                         .withIssuedAt(new Date(System.currentTimeMillis()))
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
-                        .withIssuer(request.getRequestURI().toString())
+                        .withExpiresAt(expiresIn)
+                        .withIssuer(request.getRequestURI())
                         .withClaim("user", appUser.getUsername())
                         .withClaim("roles", appUser.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                         .sign(algorithm);
 
+                SimpleDateFormat formatter = new SimpleDateFormat("EE MMM d y H:m:s ZZZ");
+                String expiresInString = formatter.format(expiresIn);
 
                 Map<String, String> tokens = new HashMap<>();
                 tokens.put("accessToken", accessToken);
+                tokens.put("expiresIn", String.valueOf(expiresIn.getTime()));
                 tokens.put("refreshToken", refreshToken);
 
                 response.setContentType(APPLICATION_JSON_VALUE);

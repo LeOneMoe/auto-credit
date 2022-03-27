@@ -12,13 +12,13 @@ export default function Navigation({title = `test`}) {
             <nav className={classes.navigation}>
                 <Link href={`/`}><a className={classes.link}>Home</a></Link>
                 <Link href={`/clients`}><a className={classes.link}>Clients</a></Link>
-                <Link href={`/about`}><a className={classes.link}>About</a></Link>
+                {/*<Link href={`/about`}><a className={classes.link}>About</a></Link>*/}
 
 
                 {!session ?
-                    <button className={classes.link} onClick={() => signIn()}>Sing in</button>
+                    <button className={classes.authButton} onClick={() => signIn()}>Sing in</button>
                     :
-                    <button className={classes.link} onClick={() => signOut({callbackUrl: `/signin`})}>Sing out</button>
+                    <button className={classes.authButton} onClick={() => signOut({callbackUrl: `/signin`})}>Sing out</button>
                 }
             </nav>
         </div>

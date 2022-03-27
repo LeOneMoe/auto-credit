@@ -4,6 +4,9 @@ import * as Yup from "yup";
 import {useRouter} from "next/router";
 import {useState} from "react";
 
+import classes from "../styles/login.module.css"
+import {TextField} from "../components/FormComponents/Fields";
+
 const formValidation = Yup.object().shape({
     username: Yup.string().required(`Username is required`),
     password: Yup.string().required(`Passport is required`),
@@ -16,24 +19,24 @@ const SignIn = ({}) => {
     const formik = useFormik({
         initialValues: {
             username: `admin`,
-            password: `admin`,
+            password: `admian`,
         },
         validationSchema: formValidation,
-        onSubmit: (values, {setSubmitting}) => {
-            const res = signIn('credentials', {
-                redirect: `/`,
+        onSubmit: async (values, {setSubmitting}) => {
+            const res = await signIn('credentials', {
+                redirect: null,
                 username: values.username,
                 password: values.password,
                 callbackUrl: `${window.location.origin}`,
             })
 
             if (res.error) {
-                setError(res.error)
+                setError(`Invalid combination of username and password`)
             } else {
                 setError(null)
             }
             if (res.url) {
-                router.push(res.url)
+                await router.push(res.url)
             }
 
             setSubmitting(false)
@@ -41,29 +44,46 @@ const SignIn = ({}) => {
     })
 
     return (
-        <div>
-            Welcome
-            <form onSubmit={formik.handleSubmit}>
-                {error}
+        <div className={classes.form}>
+            <div className={classes.panel}>
+                <div>
+                    <div>
+                        Welcome to AutoCredit CRM
+                    </div>
+                    <div>
+                        Please, login to system
+                    </div>
+                </div>
 
-                <label> Username
-                    <input type="text" name="username" autoComplete={`username`}
-                           value={formik.values.username}
-                           onChange={formik.handleChange}
-                           onBlur={formik.handleBlur}
+                <form onSubmit={formik.handleSubmit} className={classes.credentials}>
+                    <div className={classes.error}>
+                        {error}
+                    </div>
+
+                    <TextField
+                        width={10}
+                        type={`text`}
+                        name={`username`}
+                        label={`Username`}
+                        autoComplete={`username`}
+                        value={formik.values.username}
+                        handleChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                     />
-                </label>
-
-                <label> Password
-                    <input type="password" name="password" autoComplete={`current-password`}
-                           value={formik.values.password}
-                           onChange={formik.handleChange}
-                           onBlur={formik.handleBlur}
+                    <TextField
+                        width={10}
+                        type={`password`}
+                        name={`password`}
+                        autoComplete={`current-password`}
+                        label={`Password`}
+                        value={formik.values.password}
+                        handleChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                     />
-                </label>
 
-                <button type={`submit`}>Sign in</button>
-            </form>
+                    <button type={`submit`}>Sign in</button>
+                </form>
+            </div>
         </div>
     )
 }
