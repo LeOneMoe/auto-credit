@@ -31,6 +31,7 @@ const SignIn = ({}) => {
             })
 
             if (res.error) {
+                console.log(res.error)
                 setError(`Invalid combination of username and password`)
             } else {
                 setError(null)

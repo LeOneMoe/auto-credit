@@ -3,7 +3,7 @@ import {getSession, signIn} from "next-auth/react";
 import {useEffect} from "react";
 
 function RouteGuard({children}) {
-    const router = useRouter();
+    const router = useRouter()
 
     useEffect(() => {
         getSession().then(session => {
@@ -12,7 +12,7 @@ function RouteGuard({children}) {
                     signIn()
                 }
 
-            } else if (session.error === `RefreshAccessTokenError`) {
+            } else if (router.pathname !== `/signin` && session.error === `RefreshAccessTokenError`) {
                 signIn()
             }
         })
