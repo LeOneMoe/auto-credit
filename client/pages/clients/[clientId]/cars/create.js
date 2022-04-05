@@ -31,10 +31,6 @@ const CreateCar = () => {
         },
         validationSchema: formValidation,
         onSubmit: () => {
-            console.log(clientId)
-            console.log(`/clients/${clientId}/cars/view/`)
-            // console.log(formik.values)
-
             create(clientId, formik.values).then(r =>
                 router.push({
                     pathname: `/clients/${clientId}/cars/view/${r.id}`,

@@ -38,13 +38,14 @@ const DateField = ({
                        inputFormat,
                        width = 20,
                        disabled = false,
-                       readOnly = false
+                       readOnly = false,
+                       labelWidth = `15rem`
                    }) => {
     const [open, setOpen] = useState(false);
 
     return (
         <div className={classes.field}>
-            <div className={classes.label}>{label}</div>
+            <div className={classes.label} style={{width: labelWidth}}>{label}</div>
 
             <div className={classes.dateFieldWrapper} style={{width: width + `rem`}}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>

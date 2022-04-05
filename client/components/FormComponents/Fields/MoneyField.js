@@ -27,11 +27,23 @@ const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, r
     );
 });
 
-function MoneyField({label, name, placeholder, value, handleChange, handleBlur, error, width = 20, disabled = false, readOnly = false}) {
+function MoneyField({
+                        label,
+                        name,
+                        placeholder,
+                        value,
+                        handleChange,
+                        handleBlur,
+                        error,
+                        width = 20,
+                        disabled = false,
+                        readOnly = false,
+                        labelWidth = `15rem`
+                    }) {
     return (
 
         <div className={classes.field}>
-            <div className={classes.label}>{label}</div>
+            <div className={classes.label} style={{width: labelWidth}}>{label}</div>
 
             <div className={classes.fieldWrapper} style={{width: width + `rem`}}>
                 <Input

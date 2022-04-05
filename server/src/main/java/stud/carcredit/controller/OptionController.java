@@ -1,6 +1,7 @@
 package stud.carcredit.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import stud.carcredit.repository.NationalityRepo;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("options")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -19,6 +21,8 @@ public class OptionController {
 
     @GetMapping("nationality")
     public List<Nationality> getNationalityOptions(String key) {
+        log.info(key);
+
         if (key != null) {
             return nationalityRepo.findAllByKey(key);
         }

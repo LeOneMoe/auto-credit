@@ -40,7 +40,8 @@ const ComboBoxField = ({
                            options,
                            width = 20,
                            disabled = false,
-                           onChangeEvent
+                           onChangeEvent,
+                           labelWidth = `15rem`
                        }) => {
 
     const [initOption, setInitOption] = useState({key: ``, label: ``})
@@ -58,7 +59,7 @@ const ComboBoxField = ({
 
     return (
         <div className={classes.comboBoxField}>
-            <div className={classes.label}>{label}</div>
+            <div className={classes.label} style={{width: labelWidth}}>{label}</div>
 
             <div
                 style={{width: width + `rem`}}
