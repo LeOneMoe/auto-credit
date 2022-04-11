@@ -21,8 +21,6 @@ public class OptionController {
 
     @GetMapping("nationality")
     public List<Nationality> getNationalityOptions(String key) {
-        log.info(key);
-
         if (key != null) {
             return nationalityRepo.findAllByKey(key);
         }

@@ -45,8 +45,6 @@ public class LoanController {
             @Valid @RequestBody Loan loan,
             @PathVariable("clientId") Long clientId
     ) {
-        System.out.println(loan.toString());
-
         loan.setClientId(clientId);
         loan.setClient(clientRepo.findById(clientId).get());
         loan.setCar(carRepo.findById(loan.getCarId()).get());
@@ -73,8 +71,6 @@ public class LoanController {
 
     @DeleteMapping("clients/{clientId}/loans/{loanId}")
     public ResponseEntity<?> delete(@PathVariable("loanId") Long id) {
-        System.out.println(id);
-
         return loanRepo.findById(id).map(loan -> {
             loanRepo.delete(loan);
             return ResponseEntity.ok().build();

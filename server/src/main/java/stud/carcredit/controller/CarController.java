@@ -39,9 +39,6 @@ public class CarController {
             @PathVariable Long clientId,
             Long currentCar
     ) {
-        System.out.println(clientId);
-        System.out.println(currentCar);
-
         return carRepo.findUnused(clientId, currentCar);
     }
 

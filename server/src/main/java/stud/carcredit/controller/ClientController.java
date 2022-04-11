@@ -1,6 +1,7 @@
 package stud.carcredit.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import stud.carcredit.exceptions.NotFoundException;
@@ -11,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-
+@Slf4j
 @RestController
 @RequestMapping("clients")
 @CrossOrigin(origins = "*", allowedHeaders = "*")

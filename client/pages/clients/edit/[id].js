@@ -1,7 +1,6 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {MainLayout} from "../../../components/MainLayout";
-import {useEffect, useState} from "react";
 
 import {FormBody} from "../../../components/FormComponents/FormBody"
 import {ComboBoxField, DateField, TextField} from "../../../components/FormComponents/Fields"
@@ -17,22 +16,9 @@ const formValidation = Yup.object().shape({
     nationality: Yup.string().required(`Nationality is required`),
 })
 
-const CreateClient = ({SSClient}) => {
+const CreateClient = ({SSClient, SSOptions}) => {
     const router = useRouter()
     const id = router.query.id
-
-    const [options, setOptions] = useState([])
-
-    useEffect(() => {
-        async function loadOptions() {
-            const options = await getNationality()
-            setOptions(options)
-        }
-
-        if (options.length === 0) {
-            loadOptions()
-        }
-    })
 
     const formik = useFormik({
         initialValues: {
@@ -54,7 +40,7 @@ const CreateClient = ({SSClient}) => {
 
     return (
         <MainLayout title={`Edit Client`}>
-            <ClientsNavBar id={id} />
+            <ClientsNavBar id={id}/>
 
             <FormBody
                 submitEnabled
@@ -109,7 +95,7 @@ const CreateClient = ({SSClient}) => {
                     name={`nationality`}
                     placeholder={`Choose Nationality`}
                     value={formik.values.nationality}
-                    options={options}
+                    options={SSOptions}
                     handleChange={formik.setFieldValue}
                     handleBlur={formik.handleBlur}
                     error={formik.errors.nationality}
@@ -121,10 +107,12 @@ const CreateClient = ({SSClient}) => {
 
 export const getServerSideProps = async ({query}) => {
     const client = await getById(query.id)
+    const options = await getNationality()
 
     return {
         props: {
             SSClient: client,
+            SSOptions: options,
         }
     }
 }
