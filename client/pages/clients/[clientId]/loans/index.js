@@ -1,5 +1,4 @@
 import {deleteById, getAll} from "../../../../api/loans/crud";
-import {getNationality} from "../../../../api/clients/getNationality";
 import TableHead from "../../../../components/TableComponents/TableHead";
 import TableColumnHeader from "../../../../components/TableComponents/TableColumnHeader";
 import TableBody from "../../../../components/TableComponents/TableBody";
@@ -9,7 +8,6 @@ import Table from "../../../../components/TableComponents/Table";
 import {MainLayout} from "../../../../components/MainLayout";
 import {toIsoString} from "../../../../util/DateUtil";
 import {useRouter} from "next/router";
-import {getOptionLabel} from "../../../../util/Options";
 import LoansNavBar from "./_components/LoansNavBar";
 import Toolbar from "../../../../components/FormComponents/Toolbar";
 

@@ -15,7 +15,7 @@ const ViewClient = ({SSClient, nationality}) => {
 
     return (
         <MainLayout title={`View Client`}>
-            <ClientsNavBar id={id} />
+            <ClientsNavBar id={id}/>
 
             <FormBody
                 createEnabled
