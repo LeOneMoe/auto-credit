@@ -6,11 +6,7 @@ import {getToken} from "next-auth/jwt";
 const secret = process.env.SECRET
 
 export default async (req, res) => {
-    console.log(`__________________________`)
-
     const token = await getToken({req, secret})
-    console.log(token)
-
     const apiClient = axios.create({
         baseURL: process.env.NEXT_PUBLIC_SERVER_PATH,
         headers: {'Authorization': `Bearer ${token}`}

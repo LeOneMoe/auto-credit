@@ -72,6 +72,7 @@ const options = {
                 token.accessToken = user.accessToken
                 token.refreshToken = user.refreshToken
                 token.expiresIn = user.expiresIn
+                token.roles = user.roles
             }
 
             if (Date.now() >= token.expiresIn - 60 * 10) { // refresh token if it`s lifetime is less than 10min
@@ -85,6 +86,7 @@ const options = {
             session.accessToken = token.accessToken
             session.expires = token.expiresIn
             session.error = token.error
+            session.roles = token.roles
 
             axios.defaults.headers.common['Authorization'] = `Bearer ${session.accessToken}`
 

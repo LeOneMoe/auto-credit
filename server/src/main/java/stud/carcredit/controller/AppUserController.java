@@ -78,16 +78,18 @@ public class AppUserController {
 
                 Date expiresIn = new Date(System.currentTimeMillis() + 30 * 60 * 1000); // 30 minutes
 
+                List<String> roles = appUser.getRoles().stream().map(Role::getName).collect(Collectors.toList());
+
                 String accessToken = JWT.create()
                         .withSubject(appUser.getUsername())
                         .withIssuedAt(new Date(System.currentTimeMillis()))
                         .withExpiresAt(expiresIn)
                         .withIssuer(request.getRequestURI())
                         .withClaim("user", appUser.getUsername())
-                        .withClaim("roles", appUser.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
+                        .withClaim("roles", roles)
                         .sign(algorithm);
 
-                writeSuccessfulAuthHeaders(response, expiresIn, accessToken, refreshToken, appUser.getUsername());
+                writeSuccessfulAuthHeaders(response, expiresIn, accessToken, refreshToken, appUser.getUsername(), roles);
 
                 log.info("Successful token refresh for User: {}", appUser.getUsername());
             } catch (Exception e) {

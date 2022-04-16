@@ -17,9 +17,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
@@ -54,13 +52,15 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         Date expiresIn = new Date(System.currentTimeMillis() + 30 * 60 * 1000); // 30 minutes
 
+        List<String> roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(expiresIn)
                 .withIssuer(request.getRequestURI())
                 .withClaim("user", user.getUsername())
-                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .withClaim("roles", roles)
                 .sign(algorithm);
 
         String refreshToken = JWT.create()
@@ -69,11 +69,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withExpiresAt(new Date(System.currentTimeMillis() + 120 * 60 * 1000)) // 2 hours
                 .withIssuer(request.getRequestURI())
                 .withClaim("user", user.getUsername())
-                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .withClaim("roles", roles)
                 .sign(algorithm);
 
 
-        writeSuccessfulAuthHeaders(response, expiresIn, accessToken, refreshToken, user.getUsername());
+        writeSuccessfulAuthHeaders(response, expiresIn, accessToken, refreshToken, user.getUsername(), roles);
     }
 
     @Override
