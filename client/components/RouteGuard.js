@@ -1,9 +1,9 @@
-import {useRouter} from 'next/router';
 import {getSession, signIn} from "next-auth/react";
 import {useEffect} from "react";
 import axios from "axios";
+import {useRouter} from "next/router";
 
-function RouteGuard({children}) {
+const RouteGuard = ({children}) => {
     const router = useRouter()
 
     useEffect(() => {

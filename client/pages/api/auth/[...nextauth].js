@@ -54,7 +54,7 @@ const options = {
             }
         }),
     ],
-    secret: `secret`,
+    secret: process.env.SECRET,
     pages: {
         signIn: '/signin',
         // signOut: '/auth/signout',
