@@ -9,6 +9,7 @@ import LoansNavBar from "./_components/LoansNavBar";
 import {getAllCarsAsOptions, getById as getCarById} from "../../../../api/cars/crud";
 import FieldGroup from "../../../../components/FormComponents/FieldGroup";
 import {useState} from "react";
+import {getSession} from "next-auth/react";
 
 const formValidation = Yup.object().shape({
     creditNumber: Yup.string().nullable().trim(),
@@ -125,7 +126,8 @@ const FindLoans = ({SSCars}) => {
     )
 }
 
-export const getServerSideProps = async ({query}) => {
+export const getServerSideProps = async ({query, req}) => {
+    const {roles} = await getSession({req})
     const cars = await getAllCarsAsOptions(query.clientId)
 
     return {

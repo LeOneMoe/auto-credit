@@ -89,6 +89,14 @@ const options = {
             session.roles = token.roles
 
             axios.defaults.headers.common['Authorization'] = `Bearer ${session.accessToken}`
+            // axios.interceptors.response.use(
+            //     response=> {
+            //         return response
+            //     },
+            //     error => {
+            //         return error
+            //     }
+            // )
 
             return session
         },

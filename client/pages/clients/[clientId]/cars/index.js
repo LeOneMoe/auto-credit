@@ -11,6 +11,7 @@ import {toIsoString} from "../../../../util/DateUtil";
 import {useRouter} from "next/router";
 import CarsNavBar from "./_components/CarsNavBar";
 import Toolbar from "../../../../components/FormComponents/Toolbar";
+import {getSession} from "next-auth/react";
 
 const ListCars = ({SSCars}) => {
     const router = useRouter();
@@ -26,6 +27,7 @@ const ListCars = ({SSCars}) => {
                 createEnabled
                 onSearch={() => router.push(`/clients/${clientId}/cars/search`)}
                 onCreate={() => router.push(`/clients/${clientId}/cars/create`)}
+                onDeleteRole={`ROLE_ADMIN`}
             />
 
             <Table>
@@ -51,6 +53,7 @@ const ListCars = ({SSCars}) => {
                             onDelete={() => {
                                 deleteById(car.id).then(_ => router.reload())
                             }}
+                            onDeleteRole={`ROLE_ADMIN`}
                         >
                             <TableCell>{car.brand}</TableCell>
                             <TableCell>{car.model}</TableCell>
@@ -65,7 +68,8 @@ const ListCars = ({SSCars}) => {
     )
 }
 
-export const getServerSideProps = async ({query}) => {
+export const getServerSideProps = async ({query, req}) => {
+    const {roles} = await getSession({req})
     const cars = await getAll(query.clientId, query)
 
     const options = await getNationality()

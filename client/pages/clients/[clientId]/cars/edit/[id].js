@@ -7,6 +7,7 @@ import {DateField, MoneyField, TextField} from "../../../../../components/FormCo
 import {getById, update} from "../../../../../api/cars/crud"
 import {useRouter} from "next/router";
 import CarsNavBar from "../_components/CarsNavBar";
+import {getSession} from "next-auth/react";
 
 const formValidation = Yup.object().shape({
     brand: Yup.string().nullable().trim().required(`Brand is required`),
@@ -114,7 +115,8 @@ const CreateCar = ({SSCar}) => {
     )
 }
 
-export const getServerSideProps = async ({query}) => {
+export const getServerSideProps = async ({query, req}) => {
+    const {roles} = await getSession({req})
     const car = await getById(query.clientId, query.id)
 
     return {

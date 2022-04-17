@@ -22,13 +22,11 @@ export default function DeleteDialog({
 
             <DialogTitle id="alert-dialog-title">
                 {title}
-                Do you want to delete this user?
             </DialogTitle>
 
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                     {content}
-                    This action can`t be undone.
                 </DialogContentText>
             </DialogContent>
 

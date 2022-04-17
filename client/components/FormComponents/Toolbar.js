@@ -3,7 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteButton from "../Buttons/DeleteButton";
 
 const Toolbar = ({
                      onEdit,
@@ -16,6 +16,7 @@ const Toolbar = ({
                      deleteEnabled = false,
                      submitEnabled = false,
                      isSearchMode = false,
+                     onDeleteRole,
                  }) => {
 
     const handleKeydown = (e) => {
@@ -36,7 +37,6 @@ const Toolbar = ({
                 </IconButton>
             }
 
-
             <IconButton disabled={!createEnabled} onClick={onCreate}>
                 <AddIcon/>
             </IconButton>
@@ -49,9 +49,7 @@ const Toolbar = ({
                 <EditIcon/>
             </IconButton>
 
-            <IconButton disabled={!deleteEnabled} onClick={onDelete}>
-                <DeleteIcon/>
-            </IconButton>
+            <DeleteButton disabled={!deleteEnabled} onClick={onDelete} onDeleteRole={onDeleteRole}/>
         </div>
     )
 }

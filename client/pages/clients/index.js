@@ -12,6 +12,7 @@ import {useRouter} from "next/router";
 import {getOptionLabel} from "../../util/Options";
 import ClientsNavBar from "./_components/ClientsNavBar";
 import Toolbar from "../../components/FormComponents/Toolbar";
+import {getSession} from "next-auth/react";
 
 const ListClients = ({SSClients, options}) => {
     const router = useRouter();
@@ -25,6 +26,7 @@ const ListClients = ({SSClients, options}) => {
                 createEnabled
                 onSearch={() => router.push(`/clients/search`)}
                 onCreate={() => router.push(`/clients/create`)}
+                onDeleteRole={`ROLE_ADMIN`}
             />
 
             <Table>
@@ -49,6 +51,7 @@ const ListClients = ({SSClients, options}) => {
                             onDelete={() => {
                                 deleteById(client.id).then(_ => router.reload())
                             }}
+                            onDeleteRole={`ROLE_ADMIN`}
                         >
                             <TableCell>{client.name}</TableCell>
                             <TableCell>{toIsoString(client.dateOfBirth)}</TableCell>
@@ -63,9 +66,20 @@ const ListClients = ({SSClients, options}) => {
 }
 
 export const getServerSideProps = async ({query, req}) => {
+    const {roles} = await getSession({req})
+
     const clients = await getAll(query)
 
     const options = await getNationality()
+
+    if (!roles.includes(`ROLE_ADMIN`)) {
+        return {
+            redirect: {
+                destination: '/roleerror',
+                permanent: false,
+            },
+        }
+    }
 
     return {
         props: {

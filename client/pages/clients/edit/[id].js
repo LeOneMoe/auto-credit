@@ -8,6 +8,7 @@ import {getNationality} from "../../../api/clients/getNationality";
 import {getById, update} from "../../../api/clients/crud"
 import {useRouter} from "next/router";
 import ClientsNavBar from "../_components/ClientsNavBar";
+import {getSession} from "next-auth/react";
 
 const formValidation = Yup.object().shape({
     name: Yup.string().trim().max(30, `Too Long`).min(3, `Too Short`).required(`Name is required`),
@@ -105,7 +106,8 @@ const CreateClient = ({SSClient, SSOptions}) => {
     )
 }
 
-export const getServerSideProps = async ({query}) => {
+export const getServerSideProps = async ({query, req}) => {
+    const {roles} = await getSession({req})
     const client = await getById(query.id)
     const options = await getNationality()
 

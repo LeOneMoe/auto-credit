@@ -10,6 +10,7 @@ import {getById as getCarById, getUnusedCarsAsOptions} from "../../../../../api/
 import {useRouter} from "next/router";
 import LoansNavBar from "../_components/LoansNavBar";
 import FieldGroup from "../../../../../components/FormComponents/FieldGroup";
+import {getSession} from "next-auth/react";
 
 const formValidation = Yup.object().shape({
     creditNumber: Yup.string().nullable().trim().length(5, "Length of Credit Number must be 5 characters").required(`Credit Number is required`),
@@ -153,7 +154,8 @@ const CreateLoan = ({SSLoan, SSCar, SSCars}) => {
     )
 }
 
-export const getServerSideProps = async ({query}) => {
+export const getServerSideProps = async ({query, req}) => {
+    const {roles} = await getSession({req})
     const loan = await getById(query.clientId, query.id)
     const car = await getCarById(query.clientId, loan.carId)
     const cars = await getUnusedCarsAsOptions(query.clientId, car.id)

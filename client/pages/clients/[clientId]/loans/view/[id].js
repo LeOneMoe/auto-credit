@@ -8,6 +8,7 @@ import {getById as getCarById} from "../../../../../api/cars/crud";
 import FieldGroup from "../../../../../components/FormComponents/FieldGroup";
 import {MoneyField} from "../../../../../components/FormComponents/Fields";
 import {toIsoString} from "../../../../../util/DateUtil";
+import {getSession} from "next-auth/react";
 
 const ViewLoan = ({SSLoan, SSCar}) => {
     const router = useRouter()
@@ -43,6 +44,8 @@ const ViewLoan = ({SSLoan, SSCar}) => {
                         })
                     )
                 }
+
+                onDeleteRole={`ROLE_ADMIN`}
             >
                 <TextField
                     label={`Credit Number`}
@@ -95,7 +98,8 @@ const ViewLoan = ({SSLoan, SSCar}) => {
     )
 }
 
-export const getServerSideProps = async ({query}) => {
+export const getServerSideProps = async ({query, req}) => {
+    const {roles} = await getSession({req})
     const loan = await getById(query.clientId, query.id)
     const car = await getCarById(query.clientId, loan.carId)
 

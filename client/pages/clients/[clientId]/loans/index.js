@@ -10,6 +10,7 @@ import {toIsoString} from "../../../../util/DateUtil";
 import {useRouter} from "next/router";
 import LoansNavBar from "./_components/LoansNavBar";
 import Toolbar from "../../../../components/FormComponents/Toolbar";
+import {getSession} from "next-auth/react";
 
 const ListLoans = ({SSLoans}) => {
     const router = useRouter();
@@ -25,6 +26,7 @@ const ListLoans = ({SSLoans}) => {
                 createEnabled
                 onSearch={() => router.push(`/clients/${clientId}/loans/search`)}
                 onCreate={() => router.push(`/clients/${clientId}/loans/create`)}
+                onDeleteRole={`ROLE_ADMIN`}
             />
 
             <Table>
@@ -48,6 +50,7 @@ const ListLoans = ({SSLoans}) => {
                             onDelete={() => {
                                 deleteById(clientId, loan.id).then(_ => router.reload())
                             }}
+                            onDeleteRole={`ROLE_ADMIN`}
                         >
                             <TableCell>{loan.creditNumber}</TableCell>
                             <TableCell>{toIsoString(loan.startDate)}</TableCell>
@@ -60,7 +63,8 @@ const ListLoans = ({SSLoans}) => {
     )
 }
 
-export const getServerSideProps = async ({query}) => {
+export const getServerSideProps = async ({query, req}) => {
+    const {roles} = await getSession({req})
     const loans = await getAll(query.clientId, query)
 
     return {

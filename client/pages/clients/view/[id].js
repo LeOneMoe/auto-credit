@@ -7,6 +7,7 @@ import {toIsoString} from "../../../util/DateUtil";
 import {useRouter} from "next/router";
 import ClientsNavBar from "../_components/ClientsNavBar";
 import {getOptionLabel} from "../../../util/Options";
+import {getSession} from "next-auth/react";
 
 const ViewClient = ({SSClient, nationality}) => {
     const router = useRouter()
@@ -42,6 +43,8 @@ const ViewClient = ({SSClient, nationality}) => {
                         })
                     )
                 }
+
+                onDeleteRole={`ROLE_ADMIN`}
             >
                 <TextField
                     disabled
@@ -75,7 +78,8 @@ const ViewClient = ({SSClient, nationality}) => {
     )
 }
 
-export const getServerSideProps = async ({query}) => {
+export const getServerSideProps = async ({query, req}) => {
+    const {roles} = await getSession({req})
     const client = await getById(query.id)
 
     const options = await getNationality(client.nationality)

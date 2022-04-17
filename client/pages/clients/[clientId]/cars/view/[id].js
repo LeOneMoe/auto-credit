@@ -5,6 +5,7 @@ import {TextField} from "../../../../../components/FormComponents/Fields/TextFie
 import {useRouter} from "next/router";
 import CarsNavBar from "../_components/CarsNavBar";
 import {toIsoString} from "../../../../../util/DateUtil";
+import {getSession} from "next-auth/react";
 
 const ViewCar = ({SSCar}) => {
     const router = useRouter()
@@ -40,6 +41,8 @@ const ViewCar = ({SSCar}) => {
                         })
                     )
                 }
+
+                onDeleteRole={`ROLE_ADMIN`}
             >
                 <TextField
                     width={20}
@@ -75,7 +78,8 @@ const ViewCar = ({SSCar}) => {
     )
 }
 
-export const getServerSideProps = async ({query}) => {
+export const getServerSideProps = async ({query, req}) => {
+    const {roles} = await getSession({req})
     const car = await getById(query.clientId, query.id)
 
     return {

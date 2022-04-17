@@ -12,12 +12,7 @@ const getAll = async (params) => {
         }
     }
 
-    return await axios.get(`${process.env.NEXT_PUBLIC_SERVER_PATH}/clients`, {
-        params,
-        // headers: {
-        //     "Authorization": `Bearer ${token}`
-        // }
-    }).then(data => data.data)
+    return await axios.get(`${process.env.NEXT_PUBLIC_SERVER_PATH}/clients`, params).then(data => data.data)
 }
 
 const create = async (params) => {
