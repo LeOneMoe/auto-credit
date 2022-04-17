@@ -6,7 +6,7 @@ import TableBody from "../../components/TableComponents/TableBody";
 import TableRow from "../../components/TableComponents/TableRow";
 import TableCell from "../../components/TableComponents/TableCell";
 import Table from "../../components/TableComponents/Table";
-import {MainLayout} from "../../components/MainLayout";
+import {MainLayout} from "../../components/Layouts/MainLayout";
 import {toIsoString} from "../../util/DateUtil";
 import {useRouter} from "next/router";
 import {getOptionLabel} from "../../util/Options";
@@ -48,6 +48,7 @@ const ListClients = ({SSClients, options}) => {
                                     pathname: `/clients/edit/${client.id}`
                                 })
                             }
+                            onEditRole={`ROLE_ADMIN`}
                             onDelete={() => {
                                 deleteById(client.id).then(_ => router.reload())
                             }}

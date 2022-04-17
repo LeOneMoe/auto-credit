@@ -1,19 +1,21 @@
 import Head from "next/head";
-import classes from "../styles/errorLayout.module.css";
+import classes from "../../styles/mainLayout.module.css"
 import Navigation from "./Navigation";
 
-export function ErrorLayout({children, title = `Next App`}) {
+function MainLayout({children, title = `Next App`}) {
     return (
         <>
             <Head>
-                <title>Error {title} | Auto Credit CRM</title>
+                <title>{title} | Auto Credit CRM</title>
             </Head>
 
             <Navigation title={title}/>
 
-            <main className={classes.error}>
+            <main className={classes.main}>
                 {children}
             </main>
         </>
     )
 }
+
+export {MainLayout}

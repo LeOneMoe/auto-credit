@@ -6,7 +6,7 @@ import TableBody from "../../../../components/TableComponents/TableBody";
 import TableRow from "../../../../components/TableComponents/TableRow";
 import TableCell from "../../../../components/TableComponents/TableCell";
 import Table from "../../../../components/TableComponents/Table";
-import {MainLayout} from "../../../../components/MainLayout";
+import {MainLayout} from "../../../../components/Layouts/MainLayout";
 import {toIsoString} from "../../../../util/DateUtil";
 import {useRouter} from "next/router";
 import CarsNavBar from "./_components/CarsNavBar";
@@ -50,6 +50,7 @@ const ListCars = ({SSCars}) => {
                                     pathname: `/clients/${clientId}/cars/edit/${car.id}`
                                 })
                             }
+                            onEditRole={`ROLE_ADMIN`}
                             onDelete={() => {
                                 deleteById(car.id).then(_ => router.reload())
                             }}
@@ -73,6 +74,15 @@ export const getServerSideProps = async ({query, req}) => {
     const cars = await getAll(query.clientId, query)
 
     const options = await getNationality()
+
+    if (!roles.includes(`ROLE_ADMIN`)) {
+        return {
+            redirect: {
+                destination: '/roleerror',
+                permanent: false,
+            },
+        }
+    }
 
     return {
         props: {

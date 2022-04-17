@@ -1,8 +1,7 @@
 import classes from "../TableComponents/Table.module.css";
 import Link from "next/link";
-import {IconButton} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteButton from "../Buttons/DeleteButton";
+import EditButton from "../Buttons/EditButton";
 
 const TableRow = ({
                       children,
@@ -13,6 +12,7 @@ const TableRow = ({
                       disableEdit = false,
                       disableDelete = false,
                       onDeleteRole,
+                      onEditRole,
                   }) => {
     return (
         <div className={classes.rowPanel}>
@@ -24,9 +24,11 @@ const TableRow = ({
             </Link>
 
             <div className={classes.toolBar}>
-                <IconButton onClick={onEdit} disabled={disableEdit}>
-                    <EditIcon/>
-                </IconButton>
+                <EditButton
+                    onClick={onEdit}
+                    disabled={disableEdit}
+                    onDeleteRole={onEditRole}
+                />
 
                 <DeleteButton
                     onClick={onDelete}

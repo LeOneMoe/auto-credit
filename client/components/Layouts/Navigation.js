@@ -1,5 +1,5 @@
 import Link from "next/link";
-import classes from "../styles/navigation.module.css";
+import classes from "../../styles/navigation.module.css";
 import {signIn, signOut, useSession} from "next-auth/react";
 
 export default function Navigation({title = `test`}) {

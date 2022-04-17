@@ -1,6 +1,6 @@
 import Link from "next/link";
 import classes from "../styles/error.module.css"
-import {ErrorLayout} from "../components/ErrorLayout";
+import {ErrorLayout} from "../components/Layouts/ErrorLayout";
 import {useEffect} from "react";
 
 const NotFoundError = () => {

@@ -1,4 +1,4 @@
-import {MainLayout} from "../../../../../components/MainLayout";
+import {MainLayout} from "../../../../../components/Layouts/MainLayout";
 import {deleteById, getById} from "../../../../../api/cars/crud";
 import {FormBody} from "../../../../../components/FormComponents/FormBody";
 import {TextField} from "../../../../../components/FormComponents/Fields/TextField";
@@ -81,6 +81,15 @@ const ViewCar = ({SSCar}) => {
 export const getServerSideProps = async ({query, req}) => {
     const {roles} = await getSession({req})
     const car = await getById(query.clientId, query.id)
+
+    if (!roles.includes(`ROLE_ADMIN`)) {
+        return {
+            redirect: {
+                destination: '/roleerror',
+                permanent: false,
+            },
+        }
+    }
 
     return {
         props: {

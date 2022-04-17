@@ -1,7 +1,7 @@
 import "../styles/main.css";
 import React from "react";
 import {SessionProvider} from "next-auth/react"
-import {RouteGuard} from "../components/RouteGuard";
+import {RouteGuard} from "../components/Security/RouteGuard";
 
 const App = ({
                  Component,

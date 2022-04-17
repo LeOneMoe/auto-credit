@@ -1,5 +1,5 @@
 import {getNationality} from "../../../api/clients/getNationality";
-import {MainLayout} from "../../../components/MainLayout";
+import {MainLayout} from "../../../components/Layouts/MainLayout";
 import {deleteById, getById} from "../../../api/clients/crud";
 import {FormBody} from "../../../components/FormComponents/FormBody";
 import {TextField} from "../../../components/FormComponents/Fields/TextField";
@@ -83,6 +83,15 @@ export const getServerSideProps = async ({query, req}) => {
     const client = await getById(query.id)
 
     const options = await getNationality(client.nationality)
+
+    if (!roles.includes(`ROLE_ADMIN`)) {
+        return {
+            redirect: {
+                destination: '/roleerror',
+                permanent: false,
+            },
+        }
+    }
 
     return {
         props: {

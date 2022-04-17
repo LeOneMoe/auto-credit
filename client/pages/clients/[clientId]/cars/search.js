@@ -1,6 +1,6 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import {MainLayout} from "../../../../components/MainLayout";
+import {MainLayout} from "../../../../components/Layouts/MainLayout";
 
 import {FormBody} from "../../../../components/FormComponents/FormBody"
 import {TextField} from "../../../../components/FormComponents/Fields"

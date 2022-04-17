@@ -5,7 +5,7 @@ import TableBody from "../../../../components/TableComponents/TableBody";
 import TableRow from "../../../../components/TableComponents/TableRow";
 import TableCell from "../../../../components/TableComponents/TableCell";
 import Table from "../../../../components/TableComponents/Table";
-import {MainLayout} from "../../../../components/MainLayout";
+import {MainLayout} from "../../../../components/Layouts/MainLayout";
 import {toIsoString} from "../../../../util/DateUtil";
 import {useRouter} from "next/router";
 import LoansNavBar from "./_components/LoansNavBar";
@@ -47,6 +47,7 @@ const ListLoans = ({SSLoans}) => {
                                     pathname: `/clients/${clientId}/loans/edit/${loan.id}`
                                 })
                             }
+                            onEditRole={`ROLE_ADMIN`}
                             onDelete={() => {
                                 deleteById(clientId, loan.id).then(_ => router.reload())
                             }}
@@ -66,6 +67,15 @@ const ListLoans = ({SSLoans}) => {
 export const getServerSideProps = async ({query, req}) => {
     const {roles} = await getSession({req})
     const loans = await getAll(query.clientId, query)
+
+    if (!roles.includes(`ROLE_ADMIN`)) {
+        return {
+            redirect: {
+                destination: '/roleerror',
+                permanent: false,
+            },
+        }
+    }
 
     return {
         props: {

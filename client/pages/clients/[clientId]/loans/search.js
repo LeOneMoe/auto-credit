@@ -1,6 +1,6 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import {MainLayout} from "../../../../components/MainLayout";
+import {MainLayout} from "../../../../components/Layouts/MainLayout";
 
 import {FormBody} from "../../../../components/FormComponents/FormBody"
 import {ComboBoxField, TextField} from "../../../../components/FormComponents/Fields"
@@ -129,6 +129,15 @@ const FindLoans = ({SSCars}) => {
 export const getServerSideProps = async ({query, req}) => {
     const {roles} = await getSession({req})
     const cars = await getAllCarsAsOptions(query.clientId)
+
+    if (!roles.includes(`ROLE_ADMIN`)) {
+        return {
+            redirect: {
+                destination: '/roleerror',
+                permanent: false,
+            },
+        }
+    }
 
     return {
         props: {

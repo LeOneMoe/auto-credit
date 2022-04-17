@@ -3,18 +3,14 @@
 }
 
 .text {
-    color: var(--text-color);
-}
-
-.text > a {
-
     color: var(--primary-color);
 }
 
 .box {
     width: 300px;
-    margin: 5px;
+    padding: 1rem;
     text-align: center;
-    border: 1px solid #75E6DA;
-    background-color: #D4F1F4;
+    border: 1px solid var(--text-color);
+    border-radius: 15px;
+    background-color: var(--background-color-light);
 }
