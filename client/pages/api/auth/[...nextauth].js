@@ -57,14 +57,9 @@ const options = {
     secret: process.env.SECRET,
     pages: {
         signIn: '/signin',
-        // signOut: '/auth/signout',
-        // error: '/autherror',
-        // verifyRequest: '/auth/verify-request',
-        // newUser: '/auth/new-user'
     },
     session: {
         strategy: `jwt`,
-        // maxAge: 30 * 60 // 30 minutes
     },
     callbacks: {
         async jwt({token, account, user}) {
@@ -89,14 +84,6 @@ const options = {
             session.roles = token.roles
 
             axios.defaults.headers.common['Authorization'] = `Bearer ${session.accessToken}`
-            // axios.interceptors.response.use(
-            //     response=> {
-            //         return response
-            //     },
-            //     error => {
-            //         return error
-            //     }
-            // )
 
             return session
         },

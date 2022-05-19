@@ -17,12 +17,15 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static stud.carcredit.security.utils.HeaderWriter.writeSuccessfulAuthHeaders;
+import static stud.carcredit.security.utils.HeaderWriter.writeSuccessfulAuthResponse;
 
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -73,7 +76,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .sign(algorithm);
 
 
-        writeSuccessfulAuthHeaders(response, expiresIn, accessToken, refreshToken, user.getUsername(), roles);
+        writeSuccessfulAuthResponse(
+                response,
+                expiresIn,
+                accessToken,
+                refreshToken,
+                user.getUsername(),
+                roles
+        );
     }
 
     @Override

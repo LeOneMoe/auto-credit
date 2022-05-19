@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -16,6 +17,7 @@ import java.util.Date;
 @Table(name = "loans")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class Loan extends AuditModel {
     @Id
@@ -26,6 +28,7 @@ public class Loan extends AuditModel {
     @JoinColumn(name = "client_id", nullable = false) // name of the foreign key column
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
+    @ToString.Exclude
     private Client client;
 
     @Column(name = "client_id", updatable = false, insertable = false)
@@ -49,17 +52,4 @@ public class Loan extends AuditModel {
     @Column(name = "total_sum")
     @Digits(integer = 10, fraction = 2)
     private BigDecimal totalSum;
-
-    @Override
-    public String toString() {
-        return "Loan{" +
-                "id=" + id +
-                ", creditNumber='" + creditNumber + '\'' +
-                ", startDate=" + startDate +
-                ", client=" + client +
-                ", car=" + car +
-                ", carId=" + carId +
-                ", totalSum=" + totalSum +
-                '}';
-    }
 }

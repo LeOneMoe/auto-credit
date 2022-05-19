@@ -1,15 +1,15 @@
 package stud.carcredit;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import stud.carcredit.model.AppUser;
+import stud.carcredit.model.Role;
+import stud.carcredit.service.AppUserService;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 
 @SpringBootApplication
 @EnableJpaAuditing

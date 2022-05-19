@@ -22,7 +22,7 @@ import java.util.Collection;
 import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static stud.carcredit.security.Constants.TOKEN_PREFIX;
-import static stud.carcredit.security.utils.HeaderWriter.writeUnsuccessfulAuthHeaders;
+import static stud.carcredit.security.utils.HeaderWriter.writeUnsuccessfulAuthResponse;
 
 @Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
@@ -58,7 +58,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 } catch (Exception e) {
                     log.error("Error logging in: {}, token: {}", e.getMessage(), authorizationHeader);
 
-                    writeUnsuccessfulAuthHeaders(response, e);
+                    writeUnsuccessfulAuthResponse(response, e);
                 }
             } else {
                 filterChain.doFilter(request, response);

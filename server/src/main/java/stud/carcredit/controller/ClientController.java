@@ -12,14 +12,12 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @RestController
 @RequestMapping("clients")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
 public class ClientController {
     private final ClientRepo clientRepo;
-
 
     @GetMapping
     public List<Client> find(Client client) {
@@ -29,7 +27,6 @@ public class ClientController {
                 client.getNationality()
         );
     }
-
 
     @GetMapping("{id}")
     public Optional<Client> getById(@PathVariable("id") Long id) {

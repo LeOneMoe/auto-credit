@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static stud.carcredit.security.Constants.TOKEN_PREFIX;
-import static stud.carcredit.security.utils.HeaderWriter.writeSuccessfulAuthHeaders;
-import static stud.carcredit.security.utils.HeaderWriter.writeUnsuccessfulAuthHeaders;
+import static stud.carcredit.security.utils.HeaderWriter.writeSuccessfulAuthResponse;
+import static stud.carcredit.security.utils.HeaderWriter.writeUnsuccessfulAuthResponse;
 
 @RestController
 @RequestMapping("/auth")
@@ -89,13 +89,13 @@ public class AppUserController {
                         .withClaim("roles", roles)
                         .sign(algorithm);
 
-                writeSuccessfulAuthHeaders(response, expiresIn, accessToken, refreshToken, appUser.getUsername(), roles);
+                writeSuccessfulAuthResponse(response, expiresIn, accessToken, refreshToken, appUser.getUsername(), roles);
 
                 log.info("Successful token refresh for User: {}", appUser.getUsername());
             } catch (Exception e) {
                 log.error("Error logging in: {}", e.getMessage());
 
-                writeUnsuccessfulAuthHeaders(response, e);
+                writeUnsuccessfulAuthResponse(response, e);
             }
         } else {
             throw new RuntimeException("Refresh token is missing");

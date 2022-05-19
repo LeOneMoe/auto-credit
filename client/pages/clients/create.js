@@ -11,9 +11,9 @@ import ClientsNavBar from "./_components/ClientsNavBar";
 import {getSession} from "next-auth/react";
 
 const formValidation = Yup.object().shape({
-    name: Yup.string().trim().max(30, `Too Long`).min(3, `Too Short`).required(`Name is required`),
+    name: Yup.string().trim().min(5, `Too Short`).required(`Name is required`),
     dateOfBirth: Yup.string().nullable().required(`Date of Birth is required`),
-    passportNumber: Yup.string().min(10, `Passport number is too short`).required(`Passport Number is required`),
+    passportNumber: Yup.string().length(10, `Passport number must be 10 symbols`).required(`Passport Number is required`),
     nationality: Yup.string().required(`Nationality is required`),
 })
 
