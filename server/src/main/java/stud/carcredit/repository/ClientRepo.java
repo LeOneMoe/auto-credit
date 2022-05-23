@@ -12,8 +12,8 @@ import java.util.List;
 public interface ClientRepo extends JpaRepository<Client, Long> {
     @Query(
             "select c from Client c " +
-                    "where (:name is null or c.name like concat('%', :name, '%')) " +
-                    "and (:passportNumber is null or c.passportNumber like concat('%', :passportNumber, '%')) " +
+                    "where (:name is null or c.name like concat('%', cast(:name as text), '%')) " +
+                    "and (:passportNumber is null or c.passportNumber like concat('%', cast(:passportNumber as text), '%')) " +
                     "and (:nationality is null or c.nationality = :nationality)"
     )
     List<Client> find(

@@ -3,17 +3,19 @@ package stud.carcredit.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import stud.carcredit.model.Car;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface CarRepo extends JpaRepository<Car, Long> {
     @Query(
             "select c from Car c " +
-                    "where (:brand is null or c.brand like concat('%', :brand, '%')) " +
-                    "and (:model is null or c.model like concat('%', :model, '%')) " +
-                    "and (:number is null or c.number like concat('%', :number, '%')) " +
+                    "where (:brand is null or c.brand like concat('%', cast(:brand as text), '%')) " +
+                    "and (:model is null or c.model like concat('%', cast(:model as text), '%')) " +
+                    "and (:number is null or c.number like concat('%', cast(:number as text), '%')) " +
                     "and :clientId = c.clientId"
     )
     List<Car> find(

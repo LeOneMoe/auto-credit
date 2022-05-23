@@ -13,7 +13,7 @@ public interface LoanRepo extends JpaRepository<Loan, Long> {
 
     @Query(
             "select l from Loan l " +
-                    "where (:creditNumber is null or l.creditNumber like concat('%', :creditNumber, '%')) " +
+                    "where (:creditNumber is null or l.creditNumber like concat('%', cast(:creditNumber as text), '%')) " +
                     "and (:carId is null or l.carId = :carId) " +
                     "and :clientId = l.clientId"
     )
