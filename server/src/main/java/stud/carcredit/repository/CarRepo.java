@@ -32,6 +32,4 @@ public interface CarRepo extends JpaRepository<Car, Long> {
                     "and c.clientId = :clientId or c.id = :carId"
     )
     List<Car> findUnused(@Param("clientId") Long clientId, @Param("carId") Long carId);
-
-    Optional<List<Car>> findByClientId(Long clientId);
 }
