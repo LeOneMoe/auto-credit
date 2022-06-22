@@ -73,7 +73,7 @@ export const getServerSideProps = async ({query, req}) => {
 
     const options = await getNationality()
 
-    if (!roles.includes(`ROLE_ADMIN`)) {
+    if (!roles || !roles.includes(`ROLE_ADMIN`)) {
         return {
             redirect: {
                 destination: '/roleerror',
